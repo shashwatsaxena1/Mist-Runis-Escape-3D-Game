@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rumours of the Mist: Escape — V1</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <section class="title-card">
+      <p class="eyebrow">V1 Prototype</p>
+      <h1>Rumours of the Mist: Escape</h1>
+      <p class="subtitle">Collect all Natural Energy symbols, survive the living mist, and reach the broken exit.</p>
+    </section>
+
+    <section class="hud" aria-label="Game status">
+      <div class="meter-block">
+        <span>Health</span>
+        <div class="meter"><div id="healthBar" class="meter-fill health"></div></div>
+      </div>
+      <div class="meter-block">
+        <span>Fear</span>
+        <div class="meter"><div id="fearBar" class="meter-fill fear"></div></div>
+      </div>
+      <div class="meter-block">
+        <span>Torch</span>
+        <div class="meter"><div id="torchBar" class="meter-fill torch"></div></div>
+      </div>
+      <div class="stat-pill" id="symbolCounter">Symbols 0/5</div>
+    </section>
+
+    <section class="canvas-wrap">
+      <canvas id="gameCanvas" width="960" height="640" aria-label="Rumours of the Mist game canvas"></canvas>
+      <div id="screenOverlay" class="screen-overlay show">
+        <div class="overlay-card">
+          <p class="chapter-label">The mist is awake.</p>
+          <h2 id="overlayTitle">Enter the Ruins</h2>
+          <p id="overlayText">Yash opens his eyes inside the broken ruins. Five Natural Energy symbols are scattered in the darkness. The exit will not open until every symbol is found.</p>
+          <button id="primaryButton">Start Game</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div>
+        <strong>Move:</strong> W A S D / Arrow Keys
+      </div>
+      <div>
+        <strong>Torch:</strong> Press F to toggle light
+      </div>
+      <div>
+        <strong>Goal:</strong> collect 5 symbols, then touch the exit
+      </div>
+    </section>
+
+    <section class="mobile-controls" aria-label="Mobile controls">
+      <button data-key="ArrowUp">▲</button>
+      <div>
+        <button data-key="ArrowLeft">◀</button>
+        <button data-key="ArrowDown">▼</button>
+        <button data-key="ArrowRight">▶</button>
+      </div>
+      <button id="mobileTorch">Torch</button>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
