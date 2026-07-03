@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rumours of the Mist: Escape — V1 Fixed</title>
+  <title>Rumours of the Mist: Escape — V1 Character Select</title>
   <style>
     :root{
       --bg:#040506;--panel:rgba(11,15,20,.88);--panel2:rgba(18,24,31,.96);--text:#f4f7fb;--muted:#aab3bf;--line:rgba(255,255,255,.13);--energy:#90f7ff;--danger:#ff5050;--gold:#ffd36a;--fog:rgba(205,230,240,.12)
@@ -14,9 +14,12 @@
     body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at center,black,transparent 82%)}
     .game-shell{width:min(1120px,96vw);margin:0 auto;padding:24px 0 36px;position:relative;z-index:1}
     .title-card{padding:16px 20px;margin-bottom:12px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.035));box-shadow:0 22px 80px rgba(0,0,0,.35)}
-    .eyebrow{margin:0 0 6px;color:var(--energy);letter-spacing:.16em;text-transform:uppercase;font-size:.74rem;font-weight:900}.title-card h1{margin:0;font-size:clamp(2rem,5vw,4.5rem);line-height:.95;letter-spacing:-.055em;text-shadow:0 0 28px rgba(144,247,255,.18)}.subtitle{margin:12px 0 0;max-width:830px;color:var(--muted)}
-    .hud{display:grid;grid-template-columns:repeat(3,minmax(145px,1fr)) auto;gap:10px;align-items:center;margin-bottom:12px}.meter-block,.stat-pill,.controls,.mobile-controls button{border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 12px 38px rgba(0,0,0,.25)}.meter-block{padding:10px 12px;border-radius:16px;min-height:60px}.meter-block span{display:block;margin-bottom:8px;color:var(--muted);font-size:.78rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.meter{height:13px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}.meter-fill{height:100%;width:100%;border-radius:inherit;transition:width .18s linear}.health{background:linear-gradient(90deg,#ff5656,#ffc46b)}.fear{background:linear-gradient(90deg,#ab85ff,#ff4d96)}.torch{background:linear-gradient(90deg,#6af4ff,#fff1a0)}.stat-pill{border-radius:16px;min-height:60px;padding:0 18px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--energy);white-space:nowrap}.canvas-wrap{position:relative;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#050708;box-shadow:0 26px 95px rgba(0,0,0,.45)}canvas{display:block;width:100%;height:auto;max-height:70vh;background:#050708}.screen-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at center,rgba(11,16,22,.74),rgba(0,0,0,.89));z-index:5}.screen-overlay.show{display:flex}.overlay-card{width:min(560px,92vw);padding:28px;border:1px solid rgba(144,247,255,.28);border-radius:26px;background:linear-gradient(145deg,rgba(16,24,32,.96),rgba(6,8,10,.96));box-shadow:0 0 55px rgba(144,247,255,.12),0 30px 100px rgba(0,0,0,.55);text-align:center}.chapter-label{margin:0 0 8px;color:var(--energy);text-transform:uppercase;letter-spacing:.14em;font-weight:900;font-size:.75rem}.overlay-card h2{font-size:clamp(2rem,5vw,3.4rem);margin:0 0 12px;line-height:1}.overlay-card p{color:var(--muted);line-height:1.6}.overlay-card button,.top-button{border:0;border-radius:999px;padding:13px 22px;font-size:1rem;font-weight:900;cursor:pointer;color:#061013;background:linear-gradient(135deg,var(--energy),#fff0a4);box-shadow:0 0 28px rgba(144,247,255,.25);transition:transform .15s ease}.overlay-card button:hover,.top-button:hover{transform:translateY(-1px)}.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px;padding:12px;border-radius:18px;color:var(--muted)}.controls strong{color:var(--text)}.mobile-controls{display:none;margin-top:12px;gap:8px;align-items:center;justify-content:center;flex-direction:column}.mobile-controls div{display:flex;gap:8px}.mobile-controls button{color:var(--text);border-radius:14px;min-width:58px;min-height:48px;font-size:1.1rem;font-weight:900}.top-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.small-note{font-size:.9rem;color:var(--muted);margin:8px 0 0}.status-message{position:absolute;left:16px;bottom:16px;z-index:3;max-width:min(660px,calc(100% - 32px));padding:10px 13px;border:1px solid rgba(144,247,255,.2);border-radius:14px;color:#dffcff;background:rgba(5,9,13,.72);backdrop-filter:blur(8px);font-size:.94rem;box-shadow:0 0 25px rgba(0,0,0,.35)}
-    @media(max-width:760px){.hud{grid-template-columns:1fr}.canvas-wrap{border-radius:18px}canvas{height:65vh;object-fit:contain}.controls{font-size:.9rem}.mobile-controls{display:flex}.title-card h1{font-size:2.35rem}.game-shell{padding-top:14px}}
+    .eyebrow{margin:0 0 6px;color:var(--energy);letter-spacing:.16em;text-transform:uppercase;font-size:.74rem;font-weight:900}.title-card h1{margin:0;font-size:clamp(2rem,5vw,4.5rem);line-height:.95;letter-spacing:-.055em;text-shadow:0 0 28px rgba(144,247,255,.18)}.subtitle{margin:12px 0 0;max-width:880px;color:var(--muted)}
+    .hud{display:grid;grid-template-columns:repeat(3,minmax(145px,1fr)) auto auto;gap:10px;align-items:center;margin-bottom:12px}.meter-block,.stat-pill,.controls,.mobile-controls button{border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 12px 38px rgba(0,0,0,.25)}.meter-block{padding:10px 12px;border-radius:16px;min-height:60px}.meter-block span{display:block;margin-bottom:8px;color:var(--muted);font-size:.78rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.meter{height:13px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}.meter-fill{height:100%;width:100%;border-radius:inherit;transition:width .18s linear}.health{background:linear-gradient(90deg,#ff5656,#ffc46b)}.fear{background:linear-gradient(90deg,#ab85ff,#ff4d96)}.torch{background:linear-gradient(90deg,#6af4ff,#fff1a0)}.stat-pill{border-radius:16px;min-height:60px;padding:0 18px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--energy);white-space:nowrap}.selected-pill{color:#fff;background:linear-gradient(135deg,rgba(144,247,255,.15),rgba(255,255,255,.04))}
+    .canvas-wrap{position:relative;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#050708;box-shadow:0 26px 95px rgba(0,0,0,.45)}canvas{display:block;width:100%;height:auto;max-height:70vh;background:#050708}.screen-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at center,rgba(11,16,22,.82),rgba(0,0,0,.92));z-index:5;overflow:auto}.screen-overlay.show{display:flex}.overlay-card{width:min(920px,94vw);padding:24px;border:1px solid rgba(144,247,255,.28);border-radius:26px;background:linear-gradient(145deg,rgba(16,24,32,.97),rgba(6,8,10,.98));box-shadow:0 0 55px rgba(144,247,255,.12),0 30px 100px rgba(0,0,0,.55);text-align:center}.overlay-card.end-mode{width:min(560px,92vw)}.chapter-label{margin:0 0 8px;color:var(--energy);text-transform:uppercase;letter-spacing:.14em;font-weight:900;font-size:.75rem}.overlay-card h2{font-size:clamp(1.9rem,5vw,3.3rem);margin:0 0 12px;line-height:1}.overlay-card p{color:var(--muted);line-height:1.55}.button-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}.overlay-card button,.top-button{border:0;border-radius:999px;padding:13px 22px;font-size:1rem;font-weight:900;cursor:pointer;color:#061013;background:linear-gradient(135deg,var(--energy),#fff0a4);box-shadow:0 0 28px rgba(144,247,255,.25);transition:transform .15s ease,opacity .15s ease}.overlay-card button:hover,.top-button:hover{transform:translateY(-1px)}.overlay-card button:disabled{opacity:.45;cursor:not-allowed;transform:none}.ghost-button{background:linear-gradient(135deg,#242a33,#444b57)!important;color:#e9f8ff!important;border:1px solid rgba(255,255,255,.16)!important}.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px;padding:12px;border-radius:18px;color:var(--muted)}.controls strong{color:var(--text)}.mobile-controls{display:none;margin-top:12px;gap:8px;align-items:center;justify-content:center;flex-direction:column}.mobile-controls div{display:flex;gap:8px}.mobile-controls button{color:var(--text);border-radius:14px;min-width:58px;min-height:48px;font-size:1.1rem;font-weight:900}.top-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.small-note{font-size:.9rem;color:var(--muted);margin:8px 0 0}.status-message{position:absolute;left:16px;bottom:16px;z-index:3;max-width:min(700px,calc(100% - 32px));padding:10px 13px;border:1px solid rgba(144,247,255,.2);border-radius:14px;color:#dffcff;background:rgba(5,9,13,.72);backdrop-filter:blur(8px);font-size:.94rem;box-shadow:0 0 25px rgba(0,0,0,.35)}
+    .character-grid{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:12px;margin:18px 0 8px}.character-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:linear-gradient(150deg,rgba(255,255,255,.08),rgba(255,255,255,.025));min-height:295px;cursor:pointer;text-align:left;box-shadow:0 18px 48px rgba(0,0,0,.25);transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}.character-card:hover{transform:translateY(-3px);border-color:rgba(144,247,255,.48)}.character-card.selected{border-color:var(--energy);box-shadow:0 0 0 2px rgba(144,247,255,.22),0 18px 60px rgba(144,247,255,.12)}.portrait{height:145px;background-image:linear-gradient(180deg,transparent,rgba(0,0,0,.75)),url("assets/character_design.png");background-repeat:no-repeat;background-size:500% auto;background-position-y:0%;filter:contrast(1.08);border-bottom:1px solid rgba(255,255,255,.1)}.portrait.yash{background-position-x:0%}.portrait.vijaya{background-position-x:25%}.portrait.mikasa{background-position-x:50%}.portrait.sam{background-position-x:75%}.portrait.raj{background-position-x:100%}.card-body{padding:12px}.card-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.char-name{font-size:1rem;font-weight:1000;letter-spacing:.02em}.char-age{font-size:.72rem;color:var(--muted);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 7px}.role{margin:0 0 8px;color:var(--energy);font-weight:900;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}.stat-list{margin:0;padding:0;list-style:none;color:#d9e4ec;font-size:.82rem;line-height:1.55}.stat-list li:before{content:"• ";color:var(--energy);font-weight:900}.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:10px}.mini-stats span{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.045);border-radius:10px;padding:5px 3px;text-align:center;color:var(--muted);font-size:.72rem}.selected-check{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);font-weight:900;color:transparent}.character-card.selected .selected-check{color:#061013;background:var(--energy)}
+    @media(max-width:980px){.character-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}.hud{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.hud{grid-template-columns:1fr}.canvas-wrap{border-radius:18px}canvas{height:65vh;object-fit:contain}.controls{font-size:.9rem}.mobile-controls{display:flex}.title-card h1{font-size:2.35rem}.game-shell{padding-top:14px}.overlay-card{padding:18px}.character-grid{grid-template-columns:1fr}.character-card{min-height:230px}.portrait{height:120px}}
   </style>
 </head>
 <body>
@@ -24,13 +27,13 @@
     <section class="title-card">
       <div class="top-row">
         <div>
-          <p class="eyebrow">V1 Fixed Prototype</p>
+          <p class="eyebrow">V1.1 Character Select Prototype</p>
           <h1>Rumours of the Mist: Escape</h1>
         </div>
-        <button class="top-button" id="restartTop">Restart</button>
+        <button class="top-button" id="changeTop">Change Character</button>
       </div>
-      <p class="subtitle">Collect all Natural Energy symbols, survive the living mist, and reach the broken exit. This version is one single HTML file, so CSS and JavaScript cannot go missing.</p>
-      <p class="small-note">Tip: Click <b>Start Game</b>, then use W A S D or arrow keys. Press F to toggle the torch.</p>
+      <p class="subtitle">Choose Yash, Vijaya, Mikasa, Sam, or Raj first. Then click Start Game and survive the living mist with that selected character.</p>
+      <p class="small-note">Tip: Every character has slightly different speed, health, torch, and fear control.</p>
     </section>
 
     <section class="hud" aria-label="Game status">
@@ -38,17 +41,22 @@
       <div class="meter-block"><span>Fear</span><div class="meter"><div id="fearBar" class="meter-fill fear"></div></div></div>
       <div class="meter-block"><span>Torch</span><div class="meter"><div id="torchBar" class="meter-fill torch"></div></div></div>
       <div class="stat-pill" id="symbolCounter">Symbols 0/5</div>
+      <div class="stat-pill selected-pill" id="selectedCounter">Selected: None</div>
     </section>
 
     <section class="canvas-wrap">
       <canvas id="gameCanvas" width="960" height="640" aria-label="Rumours of the Mist game canvas"></canvas>
-      <div id="statusMessage" class="status-message">The mist is waiting. Press Start Game.</div>
+      <div id="statusMessage" class="status-message">Choose a character to begin.</div>
       <div id="screenOverlay" class="screen-overlay show">
-        <div class="overlay-card">
-          <p class="chapter-label">The mist is awake</p>
-          <h2 id="overlayTitle">Enter the Ruins</h2>
-          <p id="overlayText">Yash opens his eyes inside the broken ruins. Five Natural Energy symbols are scattered in the darkness. The exit will not open until every symbol is found.</p>
-          <button id="primaryButton">Start Game</button>
+        <div id="overlayCard" class="overlay-card">
+          <p class="chapter-label" id="overlayLabel">Before the ruins</p>
+          <h2 id="overlayTitle">Choose Your Character</h2>
+          <p id="overlayText">Pick who will enter the mist first. Your selected character will be the one you control in the game.</p>
+          <div id="characterGrid" class="character-grid"></div>
+          <div class="button-row">
+            <button id="primaryButton" disabled>Choose a character</button>
+            <button id="selectButton" class="ghost-button" style="display:none">Change Character</button>
+          </div>
         </div>
       </div>
     </section>
@@ -75,13 +83,26 @@
     const fearBar=document.getElementById("fearBar");
     const torchBar=document.getElementById("torchBar");
     const symbolCounter=document.getElementById("symbolCounter");
+    const selectedCounter=document.getElementById("selectedCounter");
     const overlay=document.getElementById("screenOverlay");
+    const overlayCard=document.getElementById("overlayCard");
+    const overlayLabel=document.getElementById("overlayLabel");
     const overlayTitle=document.getElementById("overlayTitle");
     const overlayText=document.getElementById("overlayText");
     const primaryButton=document.getElementById("primaryButton");
-    const restartTop=document.getElementById("restartTop");
+    const selectButton=document.getElementById("selectButton");
+    const changeTop=document.getElementById("changeTop");
+    const characterGrid=document.getElementById("characterGrid");
     const mobileTorch=document.getElementById("mobileTorch");
     const statusMessage=document.getElementById("statusMessage");
+
+    const CHARACTERS={
+      yash:{id:"yash",name:"Yash",age:18,role:"Observer",portrait:"yash",speed:158,maxHealth:100,maxTorch:100,fearControl:1,damageMod:1,color:"#90f7ff",dark:"#0b1117",traits:["Balanced stats","Natural Energy aura","Best for first play"]},
+      vijaya:{id:"vijaya",name:"Vijaya",age:19,role:"Brave Explorer",portrait:"vijaya",speed:170,maxHealth:105,maxTorch:95,fearControl:.92,damageMod:.95,color:"#ffd36a",dark:"#1a1110",traits:["Fast movement","Brave under pressure","Strong recovery"]},
+      mikasa:{id:"mikasa",name:"Mikasa",age:18,role:"Strategist",portrait:"mikasa",speed:154,maxHealth:95,maxTorch:115,fearControl:.72,damageMod:1.05,color:"#c7a7ff",dark:"#100f18",traits:["Fear rises slowly","Longer torch time","Careful playstyle"]},
+      sam:{id:"sam",name:"Sam",age:20,role:"Protector",portrait:"sam",speed:145,maxHealth:125,maxTorch:120,fearControl:.86,damageMod:.82,color:"#b7ffbd",dark:"#0d1710",traits:["Highest health","Strong torch","Slow but safe"]},
+      raj:{id:"raj",name:"Raj",age:18,role:"Quick Thinker",portrait:"raj",speed:182,maxHealth:85,maxTorch:100,fearControl:1.15,damageMod:1.1,color:"#f4f7fb",dark:"#161616",traits:["Fastest movement","Risky low health","Hard mode feel"]}
+    };
 
     const TILE=40;
     const MAP=[
@@ -107,15 +128,64 @@
     const TOTAL_SYMBOLS=(MAP.join("").match(/S/g)||[]).length;
 
     let player,mist,symbols,exitGate,particles,floatingTexts;
-    let gameState="intro",keys={},torchOn=true,lastTime=0,messageTimer=0;
-    let storyMessage="The mist is waiting. Press Start Game.";
+    let gameState="selecting",keys={},torchOn=true,lastTime=0,messageTimer=0;
+    let selectedCharacter=null;
+    let storyMessage="Choose a character to begin.";
+
+    function buildCharacterCards(){
+      characterGrid.innerHTML="";
+      Object.values(CHARACTERS).forEach(ch=>{
+        const card=document.createElement("button");
+        card.type="button";
+        card.className="character-card";
+        card.dataset.character=ch.id;
+        card.innerHTML=`
+          <div class="selected-check">✓</div>
+          <div class="portrait ${ch.portrait}"></div>
+          <div class="card-body">
+            <div class="card-top"><div class="char-name">${ch.name}</div><div class="char-age">Age ${ch.age}</div></div>
+            <p class="role">${ch.role}</p>
+            <ul class="stat-list">${ch.traits.map(t=>`<li>${t}</li>`).join("")}</ul>
+            <div class="mini-stats"><span>SPD ${ch.speed}</span><span>HP ${ch.maxHealth}</span><span>Torch ${ch.maxTorch}</span></div>
+          </div>`;
+        card.addEventListener("click",()=>selectCharacter(ch.id));
+        characterGrid.appendChild(card);
+      });
+    }
+
+    function selectCharacter(id){
+      selectedCharacter=CHARACTERS[id];
+      document.querySelectorAll(".character-card").forEach(card=>card.classList.toggle("selected",card.dataset.character===id));
+      primaryButton.disabled=false;
+      primaryButton.textContent="Start Game as "+selectedCharacter.name;
+      selectedCounter.textContent="Selected: "+selectedCharacter.name;
+      setMessage(selectedCharacter.name+" selected. Click Start Game.",3);
+    }
+
+    function showCharacterSelect(){
+      gameState="selecting";
+      keys={};
+      overlayCard.classList.remove("end-mode");
+      overlayLabel.textContent="Before the ruins";
+      overlayTitle.textContent="Choose Your Character";
+      overlayText.textContent="Pick who will enter the mist first. Your selected character will be the one you control in the game.";
+      characterGrid.style.display="grid";
+      selectButton.style.display="none";
+      primaryButton.disabled=!selectedCharacter;
+      primaryButton.textContent=selectedCharacter?"Start Game as "+selectedCharacter.name:"Choose a character";
+      overlay.classList.add("show");
+      setMessage("Choose a character to begin.",3);
+      document.querySelectorAll(".character-card").forEach(card=>card.classList.toggle("selected",selectedCharacter&&card.dataset.character===selectedCharacter.id));
+      draw();
+    }
 
     function parseMap(){
       symbols=[];particles=[];floatingTexts=[];exitGate=null;
+      const ch=selectedCharacter||CHARACTERS.yash;
       for(let r=0;r<MAP.length;r++){
         for(let c=0;c<MAP[r].length;c++){
           const tile=MAP[r][c],x=c*TILE+TILE/2,y=r*TILE+TILE/2;
-          if(tile==="P") player={x,y,radius:13,speed:158,health:100,fear:0,torch:100,symbols:0,invincible:0,pulse:0};
+          if(tile==="P") player={x,y,radius:13,speed:ch.speed,health:ch.maxHealth,maxHealth:ch.maxHealth,fear:0,torch:ch.maxTorch,maxTorch:ch.maxTorch,symbols:0,invincible:0,pulse:0,character:ch};
           if(tile==="M") mist={x,y,radius:18,speed:72,baseSpeed:72,drift:0,hitCooldown:0};
           if(tile==="S") symbols.push({x,y,radius:12,collected:false,phase:Math.random()*Math.PI*2});
           if(tile==="E") exitGate={x,y,radius:21};
@@ -137,14 +207,25 @@
     function setMessage(msg,time=3){storyMessage=msg;messageTimer=time;statusMessage.textContent=msg}
 
     function resetGame(){
+      if(!selectedCharacter){showCharacterSelect();return;}
       parseMap();torchOn=true;gameState="playing";lastTime=performance.now();
       overlay.classList.remove("show");
-      setMessage("Find the Natural Energy symbols. The exit is sealed.",4);
+      selectedCounter.textContent="Selected: "+selectedCharacter.name;
+      setMessage(selectedCharacter.name+" enters the ruins. Find the Natural Energy symbols.",4);
       updateHud();
+      draw();
     }
     function showEnd(title,text,buttonText){
       gameState=title.includes("Escaped")?"won":"lost";
-      overlayTitle.textContent=title;overlayText.textContent=text;primaryButton.textContent=buttonText||"Restart";overlay.classList.add("show");
+      overlayCard.classList.add("end-mode");
+      overlayLabel.textContent=title.includes("Escaped")?"The broken exit":"The mist wins";
+      overlayTitle.textContent=title;
+      overlayText.textContent=text;
+      characterGrid.style.display="none";
+      primaryButton.disabled=false;
+      primaryButton.textContent=buttonText||"Play Again";
+      selectButton.style.display="inline-block";
+      overlay.classList.add("show");
     }
 
     function updatePlayer(dt){
@@ -161,11 +242,11 @@
       player.pulse+=dt*5;
       player.invincible=Math.max(0,player.invincible-dt);
       if(torchOn && player.torch>0) player.torch=Math.max(0,player.torch-6.8*dt);
-      else if(!torchOn) player.torch=Math.min(100,player.torch+4.5*dt);
+      else if(!torchOn) player.torch=Math.min(player.maxTorch,player.torch+4.5*dt);
       if(player.torch<=0) torchOn=false;
       const danger=dist(player,mist);
-      if(danger<175) player.fear=Math.min(100,player.fear+(180-danger)*.095*dt);
-      else player.fear=Math.max(0,player.fear-6.5*dt);
+      if(danger<175) player.fear=Math.min(100,player.fear+(180-danger)*.095*dt*player.character.fearControl);
+      else player.fear=Math.max(0,player.fear-6.5*dt/player.character.fearControl);
       if(messageTimer>0){messageTimer-=dt;if(messageTimer<=0){storyMessage=player.symbols<TOTAL_SYMBOLS?"The exit opens only after all symbols are collected.":"The gate is open. Reach the broken exit.";statusMessage.textContent=storyMessage}}
     }
 
@@ -188,8 +269,9 @@
       if(!circleHitsWall(nx,mist.y,mist.radius)) mist.x=nx; else mist.x+=Math.cos(mist.drift*3)*18*dt;
       if(!circleHitsWall(mist.x,ny,mist.radius)) mist.y=ny; else mist.y+=Math.sin(mist.drift*2.7)*18*dt;
       if(d<player.radius+mist.radius+5 && player.invincible<=0 && mist.hitCooldown<=0){
-        player.health=Math.max(0,player.health-18);player.fear=Math.min(100,player.fear+22);player.invincible=1.1;mist.hitCooldown=.75;setMessage("The living mist touched Yash.",2.2);addFloat(player.x,player.y-26,"-18", "#ff7070");
-        if(player.health<=0) showEnd("The Mist Caught You","The Watcher fell before reaching the broken exit. Try again, collect every symbol, and keep moving.","Try Again");
+        const damage=Math.round(18*player.character.damageMod);
+        player.health=Math.max(0,player.health-damage);player.fear=Math.min(100,player.fear+22*player.character.fearControl);player.invincible=1.1;mist.hitCooldown=.75;setMessage("The living mist touched "+player.character.name+".",2.2);addFloat(player.x,player.y-26,"-"+damage, "#ff7070");
+        if(player.health<=0) showEnd("The Mist Caught "+player.character.name,"The selected character fell before reaching the broken exit. Try again, collect every symbol, and keep moving.","Try Again");
       }
     }
 
@@ -197,14 +279,14 @@
       for(const s of symbols){
         s.phase+=dt*3;
         if(!s.collected && Math.hypot(player.x-s.x,player.y-s.y)<player.radius+s.radius+6){
-          s.collected=true;player.symbols++;player.fear=Math.max(0,player.fear-10);player.torch=Math.min(100,player.torch+14);
-          addFloat(s.x,s.y,"+ Symbol", "#9af7ff");
-          if(player.symbols<TOTAL_SYMBOLS) setMessage(`Natural Energy symbol found. ${TOTAL_SYMBOLS-player.symbols} left.`,3);
+          s.collected=true;player.symbols++;player.fear=Math.max(0,player.fear-10);player.torch=Math.min(player.maxTorch,player.torch+14);
+          addFloat(s.x,s.y,"+ Symbol", player.character.color);
+          if(player.symbols<TOTAL_SYMBOLS) setMessage("Natural Energy symbol found. "+(TOTAL_SYMBOLS-player.symbols)+" left.",3);
           else setMessage("All symbols are collected. The broken exit has opened.",5);
         }
       }
       if(player.symbols===TOTAL_SYMBOLS && Math.hypot(player.x-exitGate.x,player.y-exitGate.y)<player.radius+exitGate.radius+4){
-        showEnd("Escaped the Ruins","Yash reaches the broken exit as the mist tears behind him. A voice whispers: ‘This is not enough, Watcher.’", "Play Again");
+        showEnd("Escaped the Ruins",player.character.name+" reaches the broken exit as the mist tears behind them. A voice whispers: ‘This is not enough, Watcher.’", "Play Again");
       }
     }
 
@@ -215,7 +297,7 @@
     }
     function addFloat(x,y,text,color){floatingTexts.push({x,y,text,color,life:1.1})}
     function updateHud(){
-      if(!player)return;healthBar.style.width=clamp(player.health,0,100)+"%";fearBar.style.width=clamp(player.fear,0,100)+"%";torchBar.style.width=clamp(player.torch,0,100)+"%";symbolCounter.textContent=`Symbols ${player.symbols}/${TOTAL_SYMBOLS}`;
+      if(!player)return;healthBar.style.width=clamp((player.health/player.maxHealth)*100,0,100)+"%";fearBar.style.width=clamp(player.fear,0,100)+"%";torchBar.style.width=clamp((player.torch/player.maxTorch)*100,0,100)+"%";symbolCounter.textContent="Symbols "+player.symbols+"/"+TOTAL_SYMBOLS;
     }
 
     function drawMap(){
@@ -232,36 +314,43 @@
       }
     }
     function drawParticles(){
-      for(const p of particles){ctx.fillStyle=`rgba(205,230,240,${p.alpha})`;ctx.beginPath();ctx.ellipse(p.x,p.y,p.size,p.size*.32,Math.sin(p.x)*.4,0,Math.PI*2);ctx.fill()}
+      for(const p of particles){ctx.fillStyle="rgba(205,230,240,"+p.alpha+")";ctx.beginPath();ctx.ellipse(p.x,p.y,p.size,p.size*.32,Math.sin(p.x)*.4,0,Math.PI*2);ctx.fill()}
     }
     function drawExit(){
+      if(!exitGate||!player)return;
       const open=player.symbols===TOTAL_SYMBOLS;
       ctx.save();ctx.translate(exitGate.x,exitGate.y);
-      ctx.shadowBlur=open?25:8;ctx.shadowColor=open?"#9af7ff":"#ff5050";
-      ctx.strokeStyle=open?"rgba(154,247,255,.85)":"rgba(255,80,80,.7)";ctx.lineWidth=5;
+      ctx.shadowBlur=open?25:8;ctx.shadowColor=open?player.character.color:"#ff5050";
+      ctx.strokeStyle=open?player.character.color:"rgba(255,80,80,.7)";ctx.lineWidth=5;
       ctx.beginPath();ctx.arc(0,0,22,0,Math.PI*2);ctx.stroke();
       ctx.fillStyle=open?"rgba(154,247,255,.12)":"rgba(255,80,80,.12)";ctx.fill();
-      ctx.fillStyle=open?"#9af7ff":"#ff7070";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText(open?"EXIT":"LOCK",0,4);ctx.restore();
+      ctx.fillStyle=open?player.character.color:"#ff7070";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText(open?"EXIT":"LOCK",0,4);ctx.restore();
     }
     function drawSymbols(){
-      for(const s of symbols){if(s.collected)continue;const glow=14+Math.sin(s.phase)*4;ctx.save();ctx.translate(s.x,s.y);ctx.shadowBlur=glow;ctx.shadowColor="#9af7ff";ctx.strokeStyle="#9af7ff";ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3+s.phase*.15;const rr=i%2?7:13;const x=Math.cos(a)*rr,y=Math.sin(a)*rr;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke();ctx.fillStyle="rgba(154,247,255,.17)";ctx.fill();ctx.restore()}
+      for(const s of symbols){if(s.collected)continue;const glow=14+Math.sin(s.phase)*4;ctx.save();ctx.translate(s.x,s.y);ctx.shadowBlur=glow;ctx.shadowColor=player?player.character.color:"#9af7ff";ctx.strokeStyle=player?player.character.color:"#9af7ff";ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3+s.phase*.15;const rr=i%2?7:13;const x=Math.cos(a)*rr,y=Math.sin(a)*rr;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke();ctx.fillStyle="rgba(154,247,255,.17)";ctx.fill();ctx.restore()}
     }
     function drawMist(){
-      ctx.save();ctx.translate(mist.x,mist.y);ctx.globalAlpha=.92;for(let i=5;i>=1;i--){ctx.fillStyle=`rgba(210,226,236,${.045*i})`;ctx.beginPath();ctx.arc(Math.sin(mist.drift*2+i)*8,Math.cos(mist.drift*1.5+i)*7,18+i*9,0,Math.PI*2);ctx.fill()}ctx.fillStyle="#050607";ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();ctx.shadowBlur=18;ctx.shadowColor="#ff4d6d";ctx.fillStyle="#ff5e75";ctx.beginPath();ctx.arc(-6,-3,3,0,Math.PI*2);ctx.arc(6,-3,3,0,Math.PI*2);ctx.fill();ctx.restore();
+      if(!mist)return;
+      ctx.save();ctx.translate(mist.x,mist.y);ctx.globalAlpha=.92;for(let i=5;i>=1;i--){ctx.fillStyle="rgba(210,226,236,"+(.045*i)+")";ctx.beginPath();ctx.arc(Math.sin(mist.drift*2+i)*8,Math.cos(mist.drift*1.5+i)*7,18+i*9,0,Math.PI*2);ctx.fill()}ctx.fillStyle="#050607";ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();ctx.shadowBlur=18;ctx.shadowColor="#ff4d6d";ctx.fillStyle="#ff5e75";ctx.beginPath();ctx.arc(-6,-3,3,0,Math.PI*2);ctx.arc(6,-3,3,0,Math.PI*2);ctx.fill();ctx.restore();
     }
     function drawPlayer(){
+      if(!player)return;
+      const ch=player.character;
       ctx.save();ctx.translate(player.x,player.y);if(player.invincible>0)ctx.globalAlpha=.55+.45*Math.sin(performance.now()/70);
-      ctx.shadowBlur=18;ctx.shadowColor="#9af7ff";ctx.fillStyle="#d9fbff";ctx.beginPath();ctx.arc(0,0,player.radius,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle="#0b1117";ctx.fillRect(-7,-3,14,15);ctx.fillStyle="#0f1720";ctx.beginPath();ctx.arc(0,-9,8,0,Math.PI*2);ctx.fill();
-      ctx.strokeStyle="#9af7ff";ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,18+Math.sin(player.pulse)*3,0,Math.PI*2);ctx.stroke();ctx.restore();
+      ctx.shadowBlur=20;ctx.shadowColor=ch.color;ctx.fillStyle=ch.color;ctx.beginPath();ctx.arc(0,0,player.radius,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=ch.dark;ctx.fillRect(-7,-3,14,15);ctx.fillStyle="#080a0d";ctx.beginPath();ctx.arc(0,-9,8,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle=ch.color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,18+Math.sin(player.pulse)*3,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle=ch.color;ctx.font="900 11px system-ui";ctx.textAlign="center";ctx.fillText(ch.name,0,-24);
+      ctx.restore();
     }
     function drawLighting(){
+      if(!player)return;
       ctx.save();ctx.fillStyle=torchOn?"rgba(0,0,0,.48)":"rgba(0,0,0,.70)";ctx.fillRect(0,0,canvas.width,canvas.height);
       ctx.globalCompositeOperation="destination-out";
-      const radius=torchOn?170+player.torch*.9:105;
+      const radius=torchOn?170+(player.torch/player.maxTorch)*90:105;
       const grd=ctx.createRadialGradient(player.x,player.y,25,player.x,player.y,radius);
       grd.addColorStop(0,"rgba(255,255,255,.9)");grd.addColorStop(.55,"rgba(255,255,255,.36)");grd.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=grd;ctx.beginPath();ctx.arc(player.x,player.y,radius,0,Math.PI*2);ctx.fill();ctx.restore();
-      if(player.fear>70){ctx.save();ctx.strokeStyle=`rgba(255,60,70,${(player.fear-70)/100})`;ctx.lineWidth=18;ctx.strokeRect(9,9,canvas.width-18,canvas.height-18);ctx.restore()}
+      if(player.fear>70){ctx.save();ctx.strokeStyle="rgba(255,60,70,"+((player.fear-70)/100)+")";ctx.lineWidth=18;ctx.strokeRect(9,9,canvas.width-18,canvas.height-18);ctx.restore()}
     }
     function drawFloatingTexts(){
       ctx.textAlign="center";ctx.font="900 16px system-ui";for(const f of floatingTexts){ctx.globalAlpha=clamp(f.life,0,1);ctx.fillStyle=f.color;ctx.fillText(f.text,f.x,f.y)}ctx.globalAlpha=1;
@@ -285,10 +374,13 @@
       btn.addEventListener("pointerleave",()=>{keys[k]=false});
     });
     mobileTorch.addEventListener("click",()=>{if(gameState==="playing"){torchOn=!torchOn;setMessage(torchOn?"Torch on.":"Torch off. Battery is recovering.",1.8)}});
-    primaryButton.addEventListener("click",()=>{primaryButton.textContent="Restart";resetGame()});
-    restartTop.addEventListener("click",()=>{primaryButton.textContent="Restart";resetGame()});
+    primaryButton.addEventListener("click",()=>{if(gameState==="selecting"){resetGame()}else{resetGame()}});
+    selectButton.addEventListener("click",showCharacterSelect);
+    changeTop.addEventListener("click",showCharacterSelect);
 
-    parseMap();updateHud();draw();requestAnimationFrame(loop);
+    buildCharacterCards();
+    selectCharacter("yash");
+    parseMap();updateHud();draw();showCharacterSelect();requestAnimationFrame(loop);
   })();
   </script>
 </body>
