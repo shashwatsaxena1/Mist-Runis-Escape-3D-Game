@@ -3,385 +3,756 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rumours of the Mist: Escape — V1 Character Select</title>
+  <title>Rumours of the Mist: Escape — 3D V1</title>
   <style>
     :root{
-      --bg:#040506;--panel:rgba(11,15,20,.88);--panel2:rgba(18,24,31,.96);--text:#f4f7fb;--muted:#aab3bf;--line:rgba(255,255,255,.13);--energy:#90f7ff;--danger:#ff5050;--gold:#ffd36a;--fog:rgba(205,230,240,.12)
+      --bg:#030607;
+      --panel:rgba(7,12,15,.82);
+      --panel2:rgba(12,18,22,.92);
+      --line:rgba(160,230,255,.22);
+      --cyan:#9cf3ff;
+      --gold:#ffd36e;
+      --red:#ff5c5c;
+      --text:#effbff;
+      --muted:#a7bec8;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:#030405;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
-    body{background:radial-gradient(circle at 18% 8%,rgba(91,132,151,.22),transparent 30%),radial-gradient(circle at 82% 24%,rgba(115,15,30,.17),transparent 28%),linear-gradient(140deg,#020203,#070a0e 48%,#030404)}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at center,black,transparent 82%)}
-    .game-shell{width:min(1120px,96vw);margin:0 auto;padding:24px 0 36px;position:relative;z-index:1}
-    .title-card{padding:16px 20px;margin-bottom:12px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.035));box-shadow:0 22px 80px rgba(0,0,0,.35)}
-    .eyebrow{margin:0 0 6px;color:var(--energy);letter-spacing:.16em;text-transform:uppercase;font-size:.74rem;font-weight:900}.title-card h1{margin:0;font-size:clamp(2rem,5vw,4.5rem);line-height:.95;letter-spacing:-.055em;text-shadow:0 0 28px rgba(144,247,255,.18)}.subtitle{margin:12px 0 0;max-width:880px;color:var(--muted)}
-    .hud{display:grid;grid-template-columns:repeat(3,minmax(145px,1fr)) auto auto;gap:10px;align-items:center;margin-bottom:12px}.meter-block,.stat-pill,.controls,.mobile-controls button{border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 12px 38px rgba(0,0,0,.25)}.meter-block{padding:10px 12px;border-radius:16px;min-height:60px}.meter-block span{display:block;margin-bottom:8px;color:var(--muted);font-size:.78rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.meter{height:13px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}.meter-fill{height:100%;width:100%;border-radius:inherit;transition:width .18s linear}.health{background:linear-gradient(90deg,#ff5656,#ffc46b)}.fear{background:linear-gradient(90deg,#ab85ff,#ff4d96)}.torch{background:linear-gradient(90deg,#6af4ff,#fff1a0)}.stat-pill{border-radius:16px;min-height:60px;padding:0 18px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--energy);white-space:nowrap}.selected-pill{color:#fff;background:linear-gradient(135deg,rgba(144,247,255,.15),rgba(255,255,255,.04))}
-    .canvas-wrap{position:relative;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#050708;box-shadow:0 26px 95px rgba(0,0,0,.45)}canvas{display:block;width:100%;height:auto;max-height:70vh;background:#050708}.screen-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at center,rgba(11,16,22,.82),rgba(0,0,0,.92));z-index:5;overflow:auto}.screen-overlay.show{display:flex}.overlay-card{width:min(920px,94vw);padding:24px;border:1px solid rgba(144,247,255,.28);border-radius:26px;background:linear-gradient(145deg,rgba(16,24,32,.97),rgba(6,8,10,.98));box-shadow:0 0 55px rgba(144,247,255,.12),0 30px 100px rgba(0,0,0,.55);text-align:center}.overlay-card.end-mode{width:min(560px,92vw)}.chapter-label{margin:0 0 8px;color:var(--energy);text-transform:uppercase;letter-spacing:.14em;font-weight:900;font-size:.75rem}.overlay-card h2{font-size:clamp(1.9rem,5vw,3.3rem);margin:0 0 12px;line-height:1}.overlay-card p{color:var(--muted);line-height:1.55}.button-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}.overlay-card button,.top-button{border:0;border-radius:999px;padding:13px 22px;font-size:1rem;font-weight:900;cursor:pointer;color:#061013;background:linear-gradient(135deg,var(--energy),#fff0a4);box-shadow:0 0 28px rgba(144,247,255,.25);transition:transform .15s ease,opacity .15s ease}.overlay-card button:hover,.top-button:hover{transform:translateY(-1px)}.overlay-card button:disabled{opacity:.45;cursor:not-allowed;transform:none}.ghost-button{background:linear-gradient(135deg,#242a33,#444b57)!important;color:#e9f8ff!important;border:1px solid rgba(255,255,255,.16)!important}.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px;padding:12px;border-radius:18px;color:var(--muted)}.controls strong{color:var(--text)}.mobile-controls{display:none;margin-top:12px;gap:8px;align-items:center;justify-content:center;flex-direction:column}.mobile-controls div{display:flex;gap:8px}.mobile-controls button{color:var(--text);border-radius:14px;min-width:58px;min-height:48px;font-size:1.1rem;font-weight:900}.top-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.small-note{font-size:.9rem;color:var(--muted);margin:8px 0 0}.status-message{position:absolute;left:16px;bottom:16px;z-index:3;max-width:min(700px,calc(100% - 32px));padding:10px 13px;border:1px solid rgba(144,247,255,.2);border-radius:14px;color:#dffcff;background:rgba(5,9,13,.72);backdrop-filter:blur(8px);font-size:.94rem;box-shadow:0 0 25px rgba(0,0,0,.35)}
-    .character-grid{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:12px;margin:18px 0 8px}.character-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:linear-gradient(150deg,rgba(255,255,255,.08),rgba(255,255,255,.025));min-height:295px;cursor:pointer;text-align:left;box-shadow:0 18px 48px rgba(0,0,0,.25);transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}.character-card:hover{transform:translateY(-3px);border-color:rgba(144,247,255,.48)}.character-card.selected{border-color:var(--energy);box-shadow:0 0 0 2px rgba(144,247,255,.22),0 18px 60px rgba(144,247,255,.12)}.portrait{height:145px;background-image:linear-gradient(180deg,transparent,rgba(0,0,0,.75)),url("assets/character_design.png");background-repeat:no-repeat;background-size:500% auto;background-position-y:0%;filter:contrast(1.08);border-bottom:1px solid rgba(255,255,255,.1)}.portrait.yash{background-position-x:0%}.portrait.vijaya{background-position-x:25%}.portrait.mikasa{background-position-x:50%}.portrait.sam{background-position-x:75%}.portrait.raj{background-position-x:100%}.card-body{padding:12px}.card-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.char-name{font-size:1rem;font-weight:1000;letter-spacing:.02em}.char-age{font-size:.72rem;color:var(--muted);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 7px}.role{margin:0 0 8px;color:var(--energy);font-weight:900;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}.stat-list{margin:0;padding:0;list-style:none;color:#d9e4ec;font-size:.82rem;line-height:1.55}.stat-list li:before{content:"• ";color:var(--energy);font-weight:900}.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:10px}.mini-stats span{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.045);border-radius:10px;padding:5px 3px;text-align:center;color:var(--muted);font-size:.72rem}.selected-check{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);font-weight:900;color:transparent}.character-card.selected .selected-check{color:#061013;background:var(--energy)}
-    @media(max-width:980px){.character-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}.hud{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:760px){.hud{grid-template-columns:1fr}.canvas-wrap{border-radius:18px}canvas{height:65vh;object-fit:contain}.controls{font-size:.9rem}.mobile-controls{display:flex}.title-card h1{font-size:2.35rem}.game-shell{padding-top:14px}.overlay-card{padding:18px}.character-grid{grid-template-columns:1fr}.character-card{min-height:230px}.portrait{height:120px}}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at center,#0e171b 0%,#030607 58%,#000 100%);color:var(--text);font-family:Georgia,'Times New Roman',serif;}
+    button{font:inherit}
+    .screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;}
+    #selectScreen{overflow:auto;background:
+      radial-gradient(circle at 50% -10%, rgba(180,220,255,.12), transparent 35%),
+      radial-gradient(circle at 90% 10%, rgba(255,211,110,.08), transparent 30%),
+      linear-gradient(180deg,#030607,#080d10 52%,#020404);
+    }
+    .selectBox{width:min(1220px,100%);min-height:min-content;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(9,15,18,.92),rgba(2,5,6,.90));box-shadow:0 0 42px rgba(0,0,0,.9), inset 0 0 60px rgba(126,224,255,.035);padding:24px;position:relative;overflow:hidden;}
+    .selectBox:before{content:"";position:absolute;inset:-40%;background:repeating-linear-gradient(90deg,transparent 0 65px,rgba(156,243,255,.03) 66px 67px);transform:rotate(-8deg);pointer-events:none}
+    .titleRow{position:relative;display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;justify-content:space-between;margin-bottom:14px}
+    .logo h1{font-size:clamp(32px,5vw,62px);letter-spacing:.02em;margin:0;text-transform:uppercase;text-shadow:0 0 14px rgba(255,255,255,.18)}
+    .logo p{margin:4px 0 0;color:var(--muted);font-size:16px;letter-spacing:.08em;text-transform:uppercase}
+    .tag{border:1px solid rgba(255,211,110,.35);color:var(--gold);padding:10px 14px;border-radius:999px;background:rgba(255,211,110,.06);font-weight:bold}
+    .intro{position:relative;color:#d9edf4;line-height:1.55;max-width:980px;margin:0 0 18px;font-size:16px}
+    .cards{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:18px 0 20px}
+    .card{border:1px solid rgba(156,243,255,.18);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));padding:8px;cursor:pointer;transition:.18s ease;min-height:390px;display:flex;flex-direction:column;outline:none;}
+    .card:hover,.card:focus{transform:translateY(-3px);border-color:rgba(156,243,255,.55);box-shadow:0 0 22px rgba(156,243,255,.15)}
+    .card.selected{border-color:rgba(255,211,110,.95);box-shadow:0 0 0 2px rgba(255,211,110,.22),0 0 28px rgba(255,211,110,.22);background:linear-gradient(180deg,rgba(255,211,110,.12),rgba(255,255,255,.03))}
+    .charCardFull{height:100%;border-radius:14px;overflow:hidden;display:flex;align-items:stretch;justify-content:center;background:transparent;box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+    .charCardFull img{width:100%;height:100%;object-fit:cover;display:block}
+    .card h3{font-size:23px;margin:0 0 4px;text-transform:uppercase;letter-spacing:.04em}
+    .role{color:var(--gold);font-weight:bold;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+    .desc{font-size:13px;color:#d3e9ef;line-height:1.35;margin-bottom:10px;min-height:54px}
+    .bars{display:grid;gap:6px;margin-top:auto}
+    .stat{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+    .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+    .fill{height:100%;background:linear-gradient(90deg,rgba(156,243,255,.8),rgba(255,211,110,.9));border-radius:999px}
+    .bottomActions{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid rgba(156,243,255,.12);padding-top:18px}
+    .controlsInfo{font-size:14px;color:#d0e6ed;line-height:1.55}
+    .primary{border:0;border-radius:14px;background:linear-gradient(180deg,#fff2bd,#d69f35);color:#120d05;padding:14px 24px;font-weight:bold;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.35),0 0 22px rgba(255,211,110,.22)}
+    .primary:hover{filter:brightness(1.06)}
+    .ghost{border:1px solid rgba(156,243,255,.25);border-radius:12px;background:rgba(8,17,21,.75);color:#eafdff;padding:10px 14px;cursor:pointer}
+
+    #gameScreen{display:none;background:#000;padding:0;}
+    #canvasWrap{position:fixed;inset:0;background:#000;overflow:hidden;}
+    canvas{width:100%;height:100%;display:block;background:#000;outline:none;cursor:crosshair;}
+    .hud{position:fixed;top:12px;left:12px;display:grid;grid-template-columns:86px minmax(230px,330px);gap:10px;align-items:start;z-index:3;pointer-events:none;}
+    .avatar{width:86px;height:118px;border:1px solid rgba(255,211,110,.45);border-radius:12px;overflow:hidden;background:rgba(0,0,0,.2);box-shadow:0 0 22px rgba(0,0,0,.5)}
+    .avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
+    .hudPanel{background:rgba(0,0,0,.50);border:1px solid rgba(156,243,255,.22);border-radius:14px;padding:10px 12px;backdrop-filter:blur(6px);}
+    .hudName{font-size:18px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:bold;margin-bottom:7px}
+    .meter{display:grid;grid-template-columns:58px 1fr 40px;gap:7px;align-items:center;font-size:12px;margin:5px 0;color:#dceff4}
+    .meterTrack{height:8px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.12);border-radius:999px;overflow:hidden}.meterFill{height:100%;border-radius:999px;background:#e8faff}.healthFill{background:linear-gradient(90deg,#9affb9,#ffec8a)}.fearFill{background:linear-gradient(90deg,#8feaff,#ff4e64)}.torchFill{background:linear-gradient(90deg,#fff0a6,#ffffff)}
+    .objective{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:3;max-width:min(760px,calc(100% - 30px));background:rgba(0,0,0,.42);border:1px solid rgba(156,243,255,.22);border-radius:999px;padding:10px 16px;color:#e9fbff;text-align:center;font-size:14px;backdrop-filter:blur(6px);pointer-events:none}
+    .miniHelp{position:fixed;right:12px;top:12px;z-index:3;background:rgba(0,0,0,.42);border:1px solid rgba(156,243,255,.22);border-radius:14px;padding:10px 12px;color:#d9edf4;font-size:13px;line-height:1.45;pointer-events:none;text-align:right;}
+    .message{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:4;background:rgba(0,0,0,.62);border:1px solid rgba(156,243,255,.35);border-radius:14px;padding:12px 18px;color:#f0feff;box-shadow:0 0 24px rgba(0,0,0,.55);max-width:min(740px,calc(100% - 34px));text-align:center;pointer-events:none;}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;z-index:8;align-items:center;justify-content:center;text-align:center;padding:20px;backdrop-filter:blur(5px)}
+    .overlayBox{max-width:680px;border:1px solid rgba(255,211,110,.4);border-radius:22px;background:linear-gradient(180deg,rgba(12,18,20,.96),rgba(0,0,0,.96));padding:28px;box-shadow:0 0 54px rgba(0,0,0,.9)}
+    .overlayBox h2{font-size:44px;margin:0 0 10px;text-transform:uppercase}.overlayBox p{color:#d8edf4;line-height:1.6}.overlayActions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+    .mobileControls{position:fixed;left:0;right:0;bottom:12px;display:none;justify-content:space-between;align-items:end;padding:0 16px;z-index:5;pointer-events:none}.pad{display:grid;grid-template-columns:58px 58px 58px;gap:8px;pointer-events:auto}.pad button{width:58px;height:52px;border-radius:15px;border:1px solid rgba(156,243,255,.25);background:rgba(0,0,0,.42);color:#e9fbff;font-size:20px}.pad .wide{grid-column:span 3;width:190px}.pad .blank{visibility:hidden}.touchTorch{pointer-events:auto;width:82px;height:82px;border-radius:50%;border:1px solid rgba(255,211,110,.45);background:rgba(0,0,0,.45);color:var(--gold);font-weight:bold}
+    @media(max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}.card{min-height:345px}.selectBox{padding:16px}.hud{grid-template-columns:70px minmax(210px,1fr)}.avatar{width:70px;height:96px}.miniHelp{display:none}.mobileControls{display:flex}.objective{top:auto;bottom:112px;border-radius:16px}.message{bottom:188px}}
+    @media(max-width:560px){.cards{grid-template-columns:1fr}.logo h1{font-size:34px}.hud{transform:scale(.88);transform-origin:top left}.mobileControls{display:flex}}
   </style>
 </head>
 <body>
-  <main class="game-shell">
-    <section class="title-card">
-      <div class="top-row">
-        <div>
-          <p class="eyebrow">V1.1 Character Select Prototype</p>
-          <h1>Rumours of the Mist: Escape</h1>
+  <section id="selectScreen" class="screen">
+    <div class="selectBox">
+      <div class="titleRow">
+        <div class="logo">
+          <h1>Rumours of the Mist</h1>
+          <p>Escape — 3D Corridor Prototype</p>
         </div>
-        <button class="top-button" id="changeTop">Change Character</button>
+        <div class="tag">V1 3D Build</div>
       </div>
-      <p class="subtitle">Choose Yash, Vijaya, Mikasa, Sam, or Raj first. Then click Start Game and survive the living mist with that selected character.</p>
-      <p class="small-note">Tip: Every character has slightly different speed, health, torch, and fear control.</p>
-    </section>
+      <p class="intro">Choose your character first. This updated build keeps the new colorful character cards inside the game. Then enter the first-person mist corridor, collect all Natural Energy symbols, survive the living mist, and find the locked exit.</p>
+      <div id="characterCards" class="cards" aria-label="Choose character"></div>
+      <div class="bottomActions">
+        <div class="controlsInfo">
+          <b>Controls:</b> W/↑ forward, S/↓ backward, A/← turn left, D/→ turn right, Q/E strafe, F torch. <br />Mouse/touch drag also turns the camera. Click inside the game once after starting if keyboard focus is needed.
+        </div>
+        <button id="startButton" class="primary">Start Game as Yash</button>
+      </div>
+    </div>
+  </section>
 
-    <section class="hud" aria-label="Game status">
-      <div class="meter-block"><span>Health</span><div class="meter"><div id="healthBar" class="meter-fill health"></div></div></div>
-      <div class="meter-block"><span>Fear</span><div class="meter"><div id="fearBar" class="meter-fill fear"></div></div></div>
-      <div class="meter-block"><span>Torch</span><div class="meter"><div id="torchBar" class="meter-fill torch"></div></div></div>
-      <div class="stat-pill" id="symbolCounter">Symbols 0/5</div>
-      <div class="stat-pill selected-pill" id="selectedCounter">Selected: None</div>
-    </section>
-
-    <section class="canvas-wrap">
-      <canvas id="gameCanvas" width="960" height="640" aria-label="Rumours of the Mist game canvas"></canvas>
-      <div id="statusMessage" class="status-message">Choose a character to begin.</div>
-      <div id="screenOverlay" class="screen-overlay show">
-        <div id="overlayCard" class="overlay-card">
-          <p class="chapter-label" id="overlayLabel">Before the ruins</p>
-          <h2 id="overlayTitle">Choose Your Character</h2>
-          <p id="overlayText">Pick who will enter the mist first. Your selected character will be the one you control in the game.</p>
-          <div id="characterGrid" class="character-grid"></div>
-          <div class="button-row">
-            <button id="primaryButton" disabled>Choose a character</button>
-            <button id="selectButton" class="ghost-button" style="display:none">Change Character</button>
-          </div>
+  <section id="gameScreen" class="screen">
+    <div id="canvasWrap"><canvas id="gameCanvas" tabindex="0"></canvas></div>
+    <div class="hud">
+      <div class="avatar"><img id="hudAvatar" alt="Selected character" /></div>
+      <div class="hudPanel">
+        <div id="hudName" class="hudName">Yash</div>
+        <div class="meter"><span>Health</span><div class="meterTrack"><div id="healthBar" class="meterFill healthFill"></div></div><span id="healthText">100</span></div>
+        <div class="meter"><span>Fear</span><div class="meterTrack"><div id="fearBar" class="meterFill fearFill"></div></div><span id="fearText">0%</span></div>
+        <div class="meter"><span>Torch</span><div class="meterTrack"><div id="torchBar" class="meterFill torchFill"></div></div><span id="torchText">100</span></div>
+        <div id="symbolText" style="margin-top:7px;color:#ffd36e;font-size:13px;letter-spacing:.05em">Symbols 0/5</div>
+      </div>
+    </div>
+    <div id="objective" class="objective">Collect 5 Natural Energy symbols. The exit opens only after all symbols are collected.</div>
+    <div class="miniHelp">WASD / Arrows<br>Q/E strafe<br>F torch<br>R restart</div>
+    <div id="message" class="message">The corridor breathes. Move forward carefully.</div>
+    <div class="mobileControls">
+      <div class="pad">
+        <button class="blank"> </button><button data-hold="forward">▲</button><button class="blank"> </button>
+        <button data-hold="turnLeft">◀</button><button data-hold="backward">▼</button><button data-hold="turnRight">▶</button>
+        <button class="wide" data-hold="strafeLeft">Strafe Left</button>
+      </div>
+      <button id="touchTorch" class="touchTorch">Torch</button>
+      <div class="pad">
+        <button class="wide" data-hold="strafeRight">Strafe Right</button>
+        <button class="blank"> </button><button data-hold="forward">▲</button><button class="blank"> </button>
+        <button data-hold="turnLeft">◀</button><button data-hold="backward">▼</button><button data-hold="turnRight">▶</button>
+      </div>
+    </div>
+    <div id="endOverlay" class="overlay">
+      <div class="overlayBox">
+        <h2 id="endTitle">Game Over</h2>
+        <p id="endText">The mist has caught the Watcher.</p>
+        <div class="overlayActions">
+          <button id="retryButton" class="primary">Restart</button>
+          <button id="selectAgainButton" class="ghost">Choose Character</button>
         </div>
       </div>
-    </section>
-
-    <section class="controls">
-      <div><strong>Move:</strong> W A S D / Arrow Keys</div>
-      <div><strong>Torch:</strong> F</div>
-      <div><strong>Goal:</strong> collect 5 symbols, then touch the exit</div>
-    </section>
-
-    <section class="mobile-controls" aria-label="Mobile controls">
-      <button data-key="ArrowUp">▲</button>
-      <div><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div>
-      <button id="mobileTorch">Torch</button>
-    </section>
-  </main>
+    </div>
+  </section>
 
   <script>
-  (function(){
-    "use strict";
-    const canvas=document.getElementById("gameCanvas");
-    const ctx=canvas.getContext("2d");
-    const healthBar=document.getElementById("healthBar");
-    const fearBar=document.getElementById("fearBar");
-    const torchBar=document.getElementById("torchBar");
-    const symbolCounter=document.getElementById("symbolCounter");
-    const selectedCounter=document.getElementById("selectedCounter");
-    const overlay=document.getElementById("screenOverlay");
-    const overlayCard=document.getElementById("overlayCard");
-    const overlayLabel=document.getElementById("overlayLabel");
-    const overlayTitle=document.getElementById("overlayTitle");
-    const overlayText=document.getElementById("overlayText");
-    const primaryButton=document.getElementById("primaryButton");
-    const selectButton=document.getElementById("selectButton");
-    const changeTop=document.getElementById("changeTop");
-    const characterGrid=document.getElementById("characterGrid");
-    const mobileTorch=document.getElementById("mobileTorch");
-    const statusMessage=document.getElementById("statusMessage");
-
-    const CHARACTERS={
-      yash:{id:"yash",name:"Yash",age:18,role:"Observer",portrait:"yash",speed:158,maxHealth:100,maxTorch:100,fearControl:1,damageMod:1,color:"#90f7ff",dark:"#0b1117",traits:["Balanced stats","Natural Energy aura","Best for first play"]},
-      vijaya:{id:"vijaya",name:"Vijaya",age:19,role:"Brave Explorer",portrait:"vijaya",speed:170,maxHealth:105,maxTorch:95,fearControl:.92,damageMod:.95,color:"#ffd36a",dark:"#1a1110",traits:["Fast movement","Brave under pressure","Strong recovery"]},
-      mikasa:{id:"mikasa",name:"Mikasa",age:18,role:"Strategist",portrait:"mikasa",speed:154,maxHealth:95,maxTorch:115,fearControl:.72,damageMod:1.05,color:"#c7a7ff",dark:"#100f18",traits:["Fear rises slowly","Longer torch time","Careful playstyle"]},
-      sam:{id:"sam",name:"Sam",age:20,role:"Protector",portrait:"sam",speed:145,maxHealth:125,maxTorch:120,fearControl:.86,damageMod:.82,color:"#b7ffbd",dark:"#0d1710",traits:["Highest health","Strong torch","Slow but safe"]},
-      raj:{id:"raj",name:"Raj",age:18,role:"Quick Thinker",portrait:"raj",speed:182,maxHealth:85,maxTorch:100,fearControl:1.15,damageMod:1.1,color:"#f4f7fb",dark:"#161616",traits:["Fastest movement","Risky low health","Hard mode feel"]}
+    'use strict';
+    const CHARACTER_IMAGES = {
+      Yash: 'assets/yash.png',
+      Vijaya: 'assets/vijaya.png',
+      Mikasa: 'assets/mikasa.png',
+      Sam: 'assets/sam.png',
+      Raj: 'assets/raj.png'
     };
+    const CHARACTER_AVATARS = {
+      Yash: 'assets/yash_avatar.png',
+      Vijaya: 'assets/vijaya_avatar.png',
+      Mikasa: 'assets/mikasa_avatar.png',
+      Sam: 'assets/sam_avatar.png',
+      Raj: 'assets/raj_avatar.png'
+    };
+    const CHARACTERS = {"Yash": {"age": 18, "role": "Balanced observer", "speed": 2.3, "maxHealth": 100, "courage": 1.0, "fearGain": 1.0, "torchPower": 1.0, "quote": "Calm, highly observant, protects others silently.", "mark": "\u2726"}, "Vijaya": {"age": 19, "role": "Fast explorer", "speed": 2.72, "maxHealth": 90, "courage": 0.92, "fearGain": 0.95, "torchPower": 0.92, "quote": "Brave, cheerful, emotional, adventurous.", "mark": "\u25c7"}, "Mikasa": {"age": 18, "role": "Strategic fighter", "speed": 2.15, "maxHealth": 95, "courage": 1.28, "fearGain": 0.72, "torchPower": 1.05, "quote": "Analytical, loyal, controlled under fear.", "mark": "\u2727"}, "Sam": {"age": 20, "role": "Torch defender", "speed": 2.0, "maxHealth": 125, "courage": 1.1, "fearGain": 0.85, "torchPower": 1.42, "quote": "Strong endurance, loyal, protective.", "mark": "\u2739"}, "Raj": {"age": 18, "role": "Risky runner", "speed": 2.95, "maxHealth": 82, "courage": 0.72, "fearGain": 1.35, "torchPower": 0.82, "quote": "Quick thinker, charming, but panic rises fast.", "mark": "\u273a"}};
 
-    const TILE=40;
-    const MAP=[
-      "########################",
-      "#P....#.......#....S...#",
-      "#.##..#.#####.#.####...#",
-      "#......S....#.#....#...#",
-      "####.#####..#...##.#...#",
-      "#....#......#####..#...#",
-      "#.##.#.####.....#..S...#",
-      "#.#..#....#.###.#.##...#",
-      "#.#.####..#...#.#......#",
-      "#.#....#..###.#.#####..#",
-      "#.####.#S.....#.....#..#",
-      "#......####.#######.#..#",
-      "#.######....#.....#.#..#",
-      "#....S...##...###...E..#",
-      "#.......M.#............#",
-      "########################"
+    const SELECTED_DEFAULT = 'Yash';
+    let selectedName = SELECTED_DEFAULT;
+
+    const characterCards = document.getElementById('characterCards');
+    const startButton = document.getElementById('startButton');
+    const selectScreen = document.getElementById('selectScreen');
+    const gameScreen = document.getElementById('gameScreen');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const hudAvatar = document.getElementById('hudAvatar');
+    const hudName = document.getElementById('hudName');
+    const healthBar = document.getElementById('healthBar');
+    const fearBar = document.getElementById('fearBar');
+    const torchBar = document.getElementById('torchBar');
+    const healthText = document.getElementById('healthText');
+    const fearText = document.getElementById('fearText');
+    const torchText = document.getElementById('torchText');
+    const symbolText = document.getElementById('symbolText');
+    const objective = document.getElementById('objective');
+    const messageEl = document.getElementById('message');
+    const endOverlay = document.getElementById('endOverlay');
+    const endTitle = document.getElementById('endTitle');
+    const endText = document.getElementById('endText');
+    const retryButton = document.getElementById('retryButton');
+    const selectAgainButton = document.getElementById('selectAgainButton');
+    const touchTorch = document.getElementById('touchTorch');
+
+    const imgCache = {};
+    for (const [name, src] of Object.entries(CHARACTER_IMAGES)) {
+      const image = new Image();
+      image.src = src;
+      imgCache[name] = image;
+    }
+
+    const MAP = [
+      '111111111111111111111',
+      '100000000100000000001',
+      '101111110101111111101',
+      '100010000100000100001',
+      '111010111111110101111',
+      '100010100000010100001',
+      '101110101111010111101',
+      '100000100001010000001',
+      '101111111101011111101',
+      '100000000001000100001',
+      '111111011111110101111',
+      '100000010000000100001',
+      '101111010111111111101',
+      '100001010100000000001',
+      '111101010101111111101',
+      '100001000100000000001',
+      '101111111111011111101',
+      '100000000000000000001',
+      '111111111111111111111'
     ];
-    const WORLD_WIDTH=MAP[0].length*TILE;
-    const WORLD_HEIGHT=MAP.length*TILE;
-    const TOTAL_SYMBOLS=(MAP.join("").match(/S/g)||[]).length;
+    const MAP_W = MAP[0].length;
+    const MAP_H = MAP.length;
+    const FOV = Math.PI / 3.05;
+    const MAX_DEPTH = 18;
+    const TOTAL_SYMBOLS = 5;
 
-    let player,mist,symbols,exitGate,particles,floatingTexts;
-    let gameState="selecting",keys={},torchOn=true,lastTime=0,messageTimer=0;
-    let selectedCharacter=null;
-    let storyMessage="Choose a character to begin.";
+    let state = 'select';
+    let player, enemy, symbols, exitGate, torchOn, lastTime, messageTimer, zBuffer, showMiniMap;
+    const keys = Object.create(null);
+    const hold = {forward:false, backward:false, turnLeft:false, turnRight:false, strafeLeft:false, strafeRight:false};
+    let pointerDragging = false;
+    let lastPointerX = 0;
+    let time = 0;
 
-    function buildCharacterCards(){
-      characterGrid.innerHTML="";
-      Object.values(CHARACTERS).forEach(ch=>{
-        const card=document.createElement("button");
-        card.type="button";
-        card.className="character-card";
-        card.dataset.character=ch.id;
-        card.innerHTML=`
-          <div class="selected-check">✓</div>
-          <div class="portrait ${ch.portrait}"></div>
-          <div class="card-body">
-            <div class="card-top"><div class="char-name">${ch.name}</div><div class="char-age">Age ${ch.age}</div></div>
-            <p class="role">${ch.role}</p>
-            <ul class="stat-list">${ch.traits.map(t=>`<li>${t}</li>`).join("")}</ul>
-            <div class="mini-stats"><span>SPD ${ch.speed}</span><span>HP ${ch.maxHealth}</span><span>Torch ${ch.maxTorch}</span></div>
-          </div>`;
-        card.addEventListener("click",()=>selectCharacter(ch.id));
-        characterGrid.appendChild(card);
-      });
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+    function lerp(a,b,t){ return a + (b-a)*t; }
+    function normAngle(a){ while(a < -Math.PI) a += Math.PI*2; while(a > Math.PI) a -= Math.PI*2; return a; }
+    function dist(a,b,c,d){ return Math.hypot(a-c,b-d); }
+    function isWall(x,y){
+      const mx = Math.floor(x), my = Math.floor(y);
+      if(mx < 0 || my < 0 || mx >= MAP_W || my >= MAP_H) return true;
+      return MAP[my][mx] === '1';
     }
-
-    function selectCharacter(id){
-      selectedCharacter=CHARACTERS[id];
-      document.querySelectorAll(".character-card").forEach(card=>card.classList.toggle("selected",card.dataset.character===id));
-      primaryButton.disabled=false;
-      primaryButton.textContent="Start Game as "+selectedCharacter.name;
-      selectedCounter.textContent="Selected: "+selectedCharacter.name;
-      setMessage(selectedCharacter.name+" selected. Click Start Game.",3);
+    function canStand(x,y){
+      const r = 0.18;
+      return !isWall(x-r,y-r) && !isWall(x+r,y-r) && !isWall(x-r,y+r) && !isWall(x+r,y+r);
     }
-
-    function showCharacterSelect(){
-      gameState="selecting";
-      keys={};
-      overlayCard.classList.remove("end-mode");
-      overlayLabel.textContent="Before the ruins";
-      overlayTitle.textContent="Choose Your Character";
-      overlayText.textContent="Pick who will enter the mist first. Your selected character will be the one you control in the game.";
-      characterGrid.style.display="grid";
-      selectButton.style.display="none";
-      primaryButton.disabled=!selectedCharacter;
-      primaryButton.textContent=selectedCharacter?"Start Game as "+selectedCharacter.name:"Choose a character";
-      overlay.classList.add("show");
-      setMessage("Choose a character to begin.",3);
-      document.querySelectorAll(".character-card").forEach(card=>card.classList.toggle("selected",selectedCharacter&&card.dataset.character===selectedCharacter.id));
-      draw();
+    function tryMove(obj, nx, ny){
+      if(canStand(nx, obj.y)) obj.x = nx;
+      if(canStand(obj.x, ny)) obj.y = ny;
     }
+    function setMessage(text, seconds=3){ messageEl.textContent = text; messageTimer = seconds; }
 
-    function parseMap(){
-      symbols=[];particles=[];floatingTexts=[];exitGate=null;
-      const ch=selectedCharacter||CHARACTERS.yash;
-      for(let r=0;r<MAP.length;r++){
-        for(let c=0;c<MAP[r].length;c++){
-          const tile=MAP[r][c],x=c*TILE+TILE/2,y=r*TILE+TILE/2;
-          if(tile==="P") player={x,y,radius:13,speed:ch.speed,health:ch.maxHealth,maxHealth:ch.maxHealth,fear:0,torch:ch.maxTorch,maxTorch:ch.maxTorch,symbols:0,invincible:0,pulse:0,character:ch};
-          if(tile==="M") mist={x,y,radius:18,speed:72,baseSpeed:72,drift:0,hitCooldown:0};
-          if(tile==="S") symbols.push({x,y,radius:12,collected:false,phase:Math.random()*Math.PI*2});
-          if(tile==="E") exitGate={x,y,radius:21};
-        }
+    function buildCards(){
+      characterCards.innerHTML = '';
+      for(const [name, data] of Object.entries(CHARACTERS)){
+        const card = document.createElement('button');
+        card.className = 'card' + (name === selectedName ? ' selected' : '');
+        card.type = 'button';
+        card.dataset.name = name;
+        card.setAttribute('aria-label', 'Choose ' + name);
+        card.innerHTML = `
+          <div class="charCardFull"><img src="${CHARACTER_IMAGES[name]}" alt="${name}" /></div>
+        `;
+        card.addEventListener('click', () => selectCharacter(name));
+        characterCards.appendChild(card);
       }
-      for(let i=0;i<130;i++) particles.push({x:Math.random()*WORLD_WIDTH,y:Math.random()*WORLD_HEIGHT,vx:-10+Math.random()*20,vy:-4+Math.random()*8,size:16+Math.random()*55,alpha:.035+Math.random()*.105});
+    }
+    function selectCharacter(name){
+      selectedName = name;
+      buildCards();
+      startButton.textContent = 'Start Game as ' + name;
     }
 
-    function isWallAt(x,y){
-      if(x<0||y<0||x>=WORLD_WIDTH||y>=WORLD_HEIGHT) return true;
-      const c=Math.floor(x/TILE),r=Math.floor(y/TILE);
-      return MAP[r]&&MAP[r][c]==="#";
+    function resizeCanvas(){
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(640, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(360, Math.floor(rect.height * dpr));
+      ctx.imageSmoothingEnabled = true;
     }
-    function circleHitsWall(x,y,r){
-      return isWallAt(x-r,y-r)||isWallAt(x+r,y-r)||isWallAt(x-r,y+r)||isWallAt(x+r,y+r)||isWallAt(x,y-r)||isWallAt(x,y+r)||isWallAt(x-r,y)||isWallAt(x+r,y);
-    }
-    function dist(a,b){const dx=a.x-b.x,dy=a.y-b.y;return Math.hypot(dx,dy)}
-    function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
-    function setMessage(msg,time=3){storyMessage=msg;messageTimer=time;statusMessage.textContent=msg}
+    window.addEventListener('resize', resizeCanvas);
 
     function resetGame(){
-      if(!selectedCharacter){showCharacterSelect();return;}
-      parseMap();torchOn=true;gameState="playing";lastTime=performance.now();
-      overlay.classList.remove("show");
-      selectedCounter.textContent="Selected: "+selectedCharacter.name;
-      setMessage(selectedCharacter.name+" enters the ruins. Find the Natural Energy symbols.",4);
-      updateHud();
-      draw();
-    }
-    function showEnd(title,text,buttonText){
-      gameState=title.includes("Escaped")?"won":"lost";
-      overlayCard.classList.add("end-mode");
-      overlayLabel.textContent=title.includes("Escaped")?"The broken exit":"The mist wins";
-      overlayTitle.textContent=title;
-      overlayText.textContent=text;
-      characterGrid.style.display="none";
-      primaryButton.disabled=false;
-      primaryButton.textContent=buttonText||"Play Again";
-      selectButton.style.display="inline-block";
-      overlay.classList.add("show");
-    }
-
-    function updatePlayer(dt){
-      let dx=0,dy=0;
-      if(keys.ArrowUp||keys.w||keys.W)dy-=1;
-      if(keys.ArrowDown||keys.s||keys.S)dy+=1;
-      if(keys.ArrowLeft||keys.a||keys.A)dx-=1;
-      if(keys.ArrowRight||keys.d||keys.D)dx+=1;
-      if(dx||dy){const l=Math.hypot(dx,dy);dx/=l;dy/=l}
-      const speed=player.speed*(player.fear>80?.82:1);
-      const nx=player.x+dx*speed*dt,ny=player.y+dy*speed*dt;
-      if(!circleHitsWall(nx,player.y,player.radius)) player.x=nx;
-      if(!circleHitsWall(player.x,ny,player.radius)) player.y=ny;
-      player.pulse+=dt*5;
-      player.invincible=Math.max(0,player.invincible-dt);
-      if(torchOn && player.torch>0) player.torch=Math.max(0,player.torch-6.8*dt);
-      else if(!torchOn) player.torch=Math.min(player.maxTorch,player.torch+4.5*dt);
-      if(player.torch<=0) torchOn=false;
-      const danger=dist(player,mist);
-      if(danger<175) player.fear=Math.min(100,player.fear+(180-danger)*.095*dt*player.character.fearControl);
-      else player.fear=Math.max(0,player.fear-6.5*dt/player.character.fearControl);
-      if(messageTimer>0){messageTimer-=dt;if(messageTimer<=0){storyMessage=player.symbols<TOTAL_SYMBOLS?"The exit opens only after all symbols are collected.":"The gate is open. Reach the broken exit.";statusMessage.textContent=storyMessage}}
+      const c = CHARACTERS[selectedName];
+      player = {
+        x: 1.55, y: 1.55, angle: 0,
+        health: c.maxHealth, maxHealth: c.maxHealth,
+        fear: 0, torch: 100, collected: 0,
+        speed: c.speed, courage: c.courage, fearGain: c.fearGain, torchPower: c.torchPower,
+        bob: 0
+      };
+      enemy = {x: 18.45, y: 1.55, speed: 0.82, path: [], pathTimer: 0, pulse: 0};
+      symbols = [
+        {x:3.5,y:1.5,collected:false},
+        {x:8.5,y:7.5,collected:false},
+        {x:11.5,y:13.5,collected:false},
+        {x:17.5,y:9.5,collected:false},
+        {x:18.5,y:17.5,collected:false}
+      ];
+      exitGate = {x:17.5,y:17.5,open:false};
+      torchOn = false;
+      showMiniMap = true;
+      messageTimer = 4;
+      setMessage(`${selectedName} enters the mist corridor. The walls are alive.`, 4);
+      updateHUD();
+      endOverlay.style.display = 'none';
+      state = 'playing';
+      lastTime = performance.now();
     }
 
-    function lineOfSightClear(a,b){
-      const steps=Math.ceil(dist(a,b)/18);
-      for(let i=1;i<steps;i++){const t=i/steps,x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t;if(isWallAt(x,y)) return false}
-      return true;
-    }
-
-    function updateMist(dt){
-      mist.drift+=dt;
-      mist.hitCooldown=Math.max(0,mist.hitCooldown-dt);
-      const d=dist(mist,player);
-      mist.speed=mist.baseSpeed+player.symbols*9+(player.fear>75?18:0);
-      let dx=0,dy=0;
-      if(lineOfSightClear(mist,player)||d<260){dx=player.x-mist.x;dy=player.y-mist.y}
-      else{dx=Math.cos(mist.drift*.7);dy=Math.sin(mist.drift*.6)}
-      const len=Math.hypot(dx,dy)||1;dx/=len;dy/=len;
-      const nx=mist.x+dx*mist.speed*dt,ny=mist.y+dy*mist.speed*dt;
-      if(!circleHitsWall(nx,mist.y,mist.radius)) mist.x=nx; else mist.x+=Math.cos(mist.drift*3)*18*dt;
-      if(!circleHitsWall(mist.x,ny,mist.radius)) mist.y=ny; else mist.y+=Math.sin(mist.drift*2.7)*18*dt;
-      if(d<player.radius+mist.radius+5 && player.invincible<=0 && mist.hitCooldown<=0){
-        const damage=Math.round(18*player.character.damageMod);
-        player.health=Math.max(0,player.health-damage);player.fear=Math.min(100,player.fear+22*player.character.fearControl);player.invincible=1.1;mist.hitCooldown=.75;setMessage("The living mist touched "+player.character.name+".",2.2);addFloat(player.x,player.y-26,"-"+damage, "#ff7070");
-        if(player.health<=0) showEnd("The Mist Caught "+player.character.name,"The selected character fell before reaching the broken exit. Try again, collect every symbol, and keep moving.","Try Again");
-      }
-    }
-
-    function updateSymbols(dt){
-      for(const s of symbols){
-        s.phase+=dt*3;
-        if(!s.collected && Math.hypot(player.x-s.x,player.y-s.y)<player.radius+s.radius+6){
-          s.collected=true;player.symbols++;player.fear=Math.max(0,player.fear-10);player.torch=Math.min(player.maxTorch,player.torch+14);
-          addFloat(s.x,s.y,"+ Symbol", player.character.color);
-          if(player.symbols<TOTAL_SYMBOLS) setMessage("Natural Energy symbol found. "+(TOTAL_SYMBOLS-player.symbols)+" left.",3);
-          else setMessage("All symbols are collected. The broken exit has opened.",5);
-        }
-      }
-      if(player.symbols===TOTAL_SYMBOLS && Math.hypot(player.x-exitGate.x,player.y-exitGate.y)<player.radius+exitGate.radius+4){
-        showEnd("Escaped the Ruins",player.character.name+" reaches the broken exit as the mist tears behind them. A voice whispers: ‘This is not enough, Watcher.’", "Play Again");
-      }
-    }
-
-    function updateParticles(dt){
-      for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.x<-80)p.x=WORLD_WIDTH+80;if(p.x>WORLD_WIDTH+80)p.x=-80;if(p.y<-80)p.y=WORLD_HEIGHT+80;if(p.y>WORLD_HEIGHT+80)p.y=-80}
-      for(const f of floatingTexts){f.y-=28*dt;f.life-=dt}
-      floatingTexts=floatingTexts.filter(f=>f.life>0);
-    }
-    function addFloat(x,y,text,color){floatingTexts.push({x,y,text,color,life:1.1})}
-    function updateHud(){
-      if(!player)return;healthBar.style.width=clamp((player.health/player.maxHealth)*100,0,100)+"%";fearBar.style.width=clamp(player.fear,0,100)+"%";torchBar.style.width=clamp((player.torch/player.maxTorch)*100,0,100)+"%";symbolCounter.textContent="Symbols "+player.symbols+"/"+TOTAL_SYMBOLS;
-    }
-
-    function drawMap(){
-      ctx.fillStyle="#050708";ctx.fillRect(0,0,canvas.width,canvas.height);
-      for(let r=0;r<MAP.length;r++) for(let c=0;c<MAP[r].length;c++){
-        const tile=MAP[r][c],x=c*TILE,y=r*TILE;
-        if(tile==="#"){
-          const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,"#192027");g.addColorStop(1,"#070a0d");ctx.fillStyle=g;ctx.fillRect(x,y,TILE,TILE);
-          ctx.strokeStyle="rgba(255,255,255,.045)";ctx.strokeRect(x+.5,y+.5,TILE-1,TILE-1);
-        }else{
-          ctx.fillStyle=((r+c)%2===0)?"#070a0e":"#080c10";ctx.fillRect(x,y,TILE,TILE);
-          if((r*7+c*3)%11===0){ctx.fillStyle="rgba(255,255,255,.035)";ctx.fillRect(x+8,y+11,18,3)}
-        }
-      }
-    }
-    function drawParticles(){
-      for(const p of particles){ctx.fillStyle="rgba(205,230,240,"+p.alpha+")";ctx.beginPath();ctx.ellipse(p.x,p.y,p.size,p.size*.32,Math.sin(p.x)*.4,0,Math.PI*2);ctx.fill()}
-    }
-    function drawExit(){
-      if(!exitGate||!player)return;
-      const open=player.symbols===TOTAL_SYMBOLS;
-      ctx.save();ctx.translate(exitGate.x,exitGate.y);
-      ctx.shadowBlur=open?25:8;ctx.shadowColor=open?player.character.color:"#ff5050";
-      ctx.strokeStyle=open?player.character.color:"rgba(255,80,80,.7)";ctx.lineWidth=5;
-      ctx.beginPath();ctx.arc(0,0,22,0,Math.PI*2);ctx.stroke();
-      ctx.fillStyle=open?"rgba(154,247,255,.12)":"rgba(255,80,80,.12)";ctx.fill();
-      ctx.fillStyle=open?player.character.color:"#ff7070";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText(open?"EXIT":"LOCK",0,4);ctx.restore();
-    }
-    function drawSymbols(){
-      for(const s of symbols){if(s.collected)continue;const glow=14+Math.sin(s.phase)*4;ctx.save();ctx.translate(s.x,s.y);ctx.shadowBlur=glow;ctx.shadowColor=player?player.character.color:"#9af7ff";ctx.strokeStyle=player?player.character.color:"#9af7ff";ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3+s.phase*.15;const rr=i%2?7:13;const x=Math.cos(a)*rr,y=Math.sin(a)*rr;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke();ctx.fillStyle="rgba(154,247,255,.17)";ctx.fill();ctx.restore()}
-    }
-    function drawMist(){
-      if(!mist)return;
-      ctx.save();ctx.translate(mist.x,mist.y);ctx.globalAlpha=.92;for(let i=5;i>=1;i--){ctx.fillStyle="rgba(210,226,236,"+(.045*i)+")";ctx.beginPath();ctx.arc(Math.sin(mist.drift*2+i)*8,Math.cos(mist.drift*1.5+i)*7,18+i*9,0,Math.PI*2);ctx.fill()}ctx.fillStyle="#050607";ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();ctx.shadowBlur=18;ctx.shadowColor="#ff4d6d";ctx.fillStyle="#ff5e75";ctx.beginPath();ctx.arc(-6,-3,3,0,Math.PI*2);ctx.arc(6,-3,3,0,Math.PI*2);ctx.fill();ctx.restore();
-    }
-    function drawPlayer(){
-      if(!player)return;
-      const ch=player.character;
-      ctx.save();ctx.translate(player.x,player.y);if(player.invincible>0)ctx.globalAlpha=.55+.45*Math.sin(performance.now()/70);
-      ctx.shadowBlur=20;ctx.shadowColor=ch.color;ctx.fillStyle=ch.color;ctx.beginPath();ctx.arc(0,0,player.radius,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=ch.dark;ctx.fillRect(-7,-3,14,15);ctx.fillStyle="#080a0d";ctx.beginPath();ctx.arc(0,-9,8,0,Math.PI*2);ctx.fill();
-      ctx.strokeStyle=ch.color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,18+Math.sin(player.pulse)*3,0,Math.PI*2);ctx.stroke();
-      ctx.fillStyle=ch.color;ctx.font="900 11px system-ui";ctx.textAlign="center";ctx.fillText(ch.name,0,-24);
-      ctx.restore();
-    }
-    function drawLighting(){
-      if(!player)return;
-      ctx.save();ctx.fillStyle=torchOn?"rgba(0,0,0,.48)":"rgba(0,0,0,.70)";ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.globalCompositeOperation="destination-out";
-      const radius=torchOn?170+(player.torch/player.maxTorch)*90:105;
-      const grd=ctx.createRadialGradient(player.x,player.y,25,player.x,player.y,radius);
-      grd.addColorStop(0,"rgba(255,255,255,.9)");grd.addColorStop(.55,"rgba(255,255,255,.36)");grd.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=grd;ctx.beginPath();ctx.arc(player.x,player.y,radius,0,Math.PI*2);ctx.fill();ctx.restore();
-      if(player.fear>70){ctx.save();ctx.strokeStyle="rgba(255,60,70,"+((player.fear-70)/100)+")";ctx.lineWidth=18;ctx.strokeRect(9,9,canvas.width-18,canvas.height-18);ctx.restore()}
-    }
-    function drawFloatingTexts(){
-      ctx.textAlign="center";ctx.font="900 16px system-ui";for(const f of floatingTexts){ctx.globalAlpha=clamp(f.life,0,1);ctx.fillStyle=f.color;ctx.fillText(f.text,f.x,f.y)}ctx.globalAlpha=1;
-    }
-    function draw(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);drawMap();drawExit();drawSymbols();drawParticles();drawMist();drawPlayer();drawFloatingTexts();drawLighting();
-    }
-    function loop(now){
-      const dt=Math.min(.033,(now-lastTime)/1000||0);lastTime=now;
-      if(gameState==="playing"){updatePlayer(dt);updateMist(dt);updateSymbols(dt);updateParticles(dt);updateHud();draw()}
-      else{draw()}
+    function startGame(){
+      hudAvatar.src = CHARACTER_AVATARS[selectedName] || CHARACTER_IMAGES[selectedName];
+      hudName.textContent = selectedName;
+      selectScreen.style.display = 'none';
+      gameScreen.style.display = 'flex';
+      resizeCanvas();
+      resetGame();
+      canvas.focus();
       requestAnimationFrame(loop);
     }
 
-    window.addEventListener("keydown",e=>{keys[e.key]=true;if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();if((e.key==="f"||e.key==="F")&&gameState==="playing"){torchOn=!torchOn;setMessage(torchOn?"Torch on. Hidden paths feel closer.":"Torch off. Battery is recovering.",1.8)}});
-    window.addEventListener("keyup",e=>{keys[e.key]=false});
-    document.querySelectorAll(".mobile-controls button[data-key]").forEach(btn=>{
-      const k=btn.getAttribute("data-key");
-      btn.addEventListener("pointerdown",e=>{e.preventDefault();keys[k]=true});
-      btn.addEventListener("pointerup",e=>{e.preventDefault();keys[k]=false});
-      btn.addEventListener("pointerleave",()=>{keys[k]=false});
-    });
-    mobileTorch.addEventListener("click",()=>{if(gameState==="playing"){torchOn=!torchOn;setMessage(torchOn?"Torch on.":"Torch off. Battery is recovering.",1.8)}});
-    primaryButton.addEventListener("click",()=>{if(gameState==="selecting"){resetGame()}else{resetGame()}});
-    selectButton.addEventListener("click",showCharacterSelect);
-    changeTop.addEventListener("click",showCharacterSelect);
+    function updateHUD(){
+      const hpPct = clamp(player.health / player.maxHealth * 100, 0, 100);
+      const fearPct = clamp(player.fear, 0, 100);
+      const torchPct = clamp(player.torch, 0, 100);
+      healthBar.style.width = hpPct + '%';
+      fearBar.style.width = fearPct + '%';
+      torchBar.style.width = torchPct + '%';
+      healthText.textContent = Math.ceil(player.health);
+      fearText.textContent = Math.round(fearPct) + '%';
+      torchText.textContent = Math.round(torchPct);
+      symbolText.textContent = `Symbols ${player.collected}/${TOTAL_SYMBOLS}`;
+      if(player.collected >= TOTAL_SYMBOLS){
+        objective.textContent = 'All symbols collected. Find the exit gate before the mist catches you.';
+      } else {
+        objective.textContent = `Collect ${TOTAL_SYMBOLS - player.collected} more Natural Energy symbol${TOTAL_SYMBOLS-player.collected===1?'':'s'}. Then reach the exit.`;
+      }
+    }
 
-    buildCharacterCards();
-    selectCharacter("yash");
-    parseMap();updateHud();draw();showCharacterSelect();requestAnimationFrame(loop);
-  })();
+    function handleInput(dt){
+      let forward = 0, strafe = 0, turn = 0;
+      if(keys['w'] || keys['arrowup'] || hold.forward) forward += 1;
+      if(keys['s'] || keys['arrowdown'] || hold.backward) forward -= 1;
+      if(keys['a'] || keys['arrowleft'] || hold.turnLeft) turn -= 1;
+      if(keys['d'] || keys['arrowright'] || hold.turnRight) turn += 1;
+      if(keys['q'] || hold.strafeLeft) strafe -= 1;
+      if(keys['e'] || hold.strafeRight) strafe += 1;
+      const fearSlow = player.fear > 78 ? 0.78 : 1;
+      const moveSpeed = player.speed * fearSlow * dt;
+      const turnSpeed = (1.9 + player.speed*0.06) * dt;
+      player.angle = normAngle(player.angle + turn * turnSpeed);
+      const dx = Math.cos(player.angle), dy = Math.sin(player.angle);
+      const sx = Math.cos(player.angle + Math.PI/2), sy = Math.sin(player.angle + Math.PI/2);
+      const nx = player.x + dx*forward*moveSpeed + sx*strafe*moveSpeed;
+      const ny = player.y + dy*forward*moveSpeed + sy*strafe*moveSpeed;
+      if(forward || strafe) {
+        tryMove(player,nx,ny);
+        player.bob += dt * 10 * Math.max(Math.abs(forward), Math.abs(strafe));
+      }
+      if((keys['f'] || hold.torch) && player.torch > 3) {
+        // handled by keydown toggle for keyboard; touch can hold using torch flag
+      }
+    }
+
+    function updateGame(dt){
+      time += dt;
+      if(messageTimer > 0){
+        messageTimer -= dt;
+        if(messageTimer <= 0) messageEl.textContent = 'The mist moves through the walls. Keep moving.';
+      }
+      handleInput(dt);
+      updateTorch(dt);
+      updateSymbols();
+      updateEnemy(dt);
+      updateFearAndDamage(dt);
+      if(player.collected >= TOTAL_SYMBOLS) exitGate.open = true;
+      if(exitGate.open && dist(player.x,player.y,exitGate.x,exitGate.y) < 0.75){
+        finishGame(true);
+      }
+      if(player.health <= 0 || player.fear >= 100){
+        finishGame(false);
+      }
+      updateHUD();
+    }
+
+    function updateTorch(dt){
+      if(torchOn && player.torch > 0){
+        player.torch -= (9.2 / player.torchPower) * dt;
+        if(player.torch <= 0){ player.torch = 0; torchOn = false; setMessage('The torch dies. The corridor goes cold.', 3); }
+      } else if(!torchOn && player.torch < 100){
+        player.torch += 4.4 * dt;
+        if(player.torch > 100) player.torch = 100;
+      }
+    }
+
+    function updateSymbols(){
+      for(const s of symbols){
+        if(!s.collected && dist(player.x,player.y,s.x,s.y) < 0.66){
+          s.collected = true;
+          player.collected++;
+          player.fear = clamp(player.fear - 11, 0, 100);
+          if(player.collected < TOTAL_SYMBOLS){
+            setMessage(`Natural Energy symbol collected. ${TOTAL_SYMBOLS - player.collected} remain.`, 2.6);
+          } else {
+            setMessage('All symbols collected. The locked exit has opened somewhere deeper in the ruins.', 4);
+          }
+        }
+      }
+      if(!exitGate.open && dist(player.x,player.y,exitGate.x,exitGate.y) < 1.05){
+        setMessage('The exit is sealed. Collect every Natural Energy symbol first.', 2.5);
+      }
+    }
+
+    function bfsNextStep(){
+      const start = {x: Math.floor(enemy.x), y: Math.floor(enemy.y)};
+      const goal = {x: Math.floor(player.x), y: Math.floor(player.y)};
+      const q = [start];
+      const seen = new Set([start.x+','+start.y]);
+      const prev = new Map();
+      let found = false;
+      for(let qi=0; qi<q.length; qi++){
+        const cur = q[qi];
+        if(cur.x === goal.x && cur.y === goal.y){ found = true; break; }
+        const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+        for(const [dx,dy] of dirs){
+          const nx = cur.x + dx, ny = cur.y + dy;
+          const key = nx+','+ny;
+          if(nx<0||ny<0||nx>=MAP_W||ny>=MAP_H||MAP[ny][nx]==='1'||seen.has(key)) continue;
+          seen.add(key); prev.set(key, cur.x+','+cur.y); q.push({x:nx,y:ny});
+        }
+      }
+      if(!found) return {x:player.x,y:player.y};
+      let key = goal.x+','+goal.y;
+      let parent = prev.get(key);
+      while(parent && parent !== start.x+','+start.y){ key = parent; parent = prev.get(key); }
+      const [nx,ny] = key.split(',').map(Number);
+      return {x:nx+0.5,y:ny+0.5};
+    }
+
+    function updateEnemy(dt){
+      enemy.pathTimer -= dt;
+      if(enemy.pathTimer <= 0){
+        enemy.pathTarget = bfsNextStep();
+        enemy.pathTimer = 0.38;
+      }
+      let target = enemy.pathTarget || {x:player.x,y:player.y};
+      let ang = Math.atan2(target.y - enemy.y, target.x - enemy.x);
+      let eSpeed = (enemy.speed + player.collected*0.075) * dt;
+      const ed = dist(enemy.x,enemy.y,player.x,player.y);
+      const angleToEnemy = normAngle(Math.atan2(enemy.y-player.y, enemy.x-player.x) - player.angle);
+      const inTorchCone = torchOn && player.torch > 0 && Math.abs(angleToEnemy) < 0.36 && ed < 5.2 * player.torchPower;
+      if(inTorchCone){
+        eSpeed *= 0.18;
+        // push the mist back a little if close and facing it
+        enemy.x += Math.cos(Math.atan2(enemy.y-player.y, enemy.x-player.x)) * dt * 0.25 * player.torchPower;
+        enemy.y += Math.sin(Math.atan2(enemy.y-player.y, enemy.x-player.x)) * dt * 0.25 * player.torchPower;
+      }
+      tryMove(enemy, enemy.x + Math.cos(ang)*eSpeed, enemy.y + Math.sin(ang)*eSpeed);
+      enemy.pulse += dt * 5;
+    }
+
+    function updateFearAndDamage(dt){
+      const d = dist(player.x,player.y,enemy.x,enemy.y);
+      let fearDelta = 0;
+      if(d < 6.2) fearDelta += (6.2-d) * 4.2 * player.fearGain;
+      if(!torchOn) fearDelta += 1.4 * player.fearGain;
+      if(player.collected >= 3) fearDelta += 0.8;
+      fearDelta -= 3.2 * player.courage;
+      if(torchOn && player.torch > 0) fearDelta -= 2.6 * player.torchPower;
+      player.fear = clamp(player.fear + fearDelta*dt, 0, 100);
+      if(d < 0.74){
+        player.health -= (18 + player.collected*2) * dt;
+        setMessage('The living mist is touching you. Run or face it with the torch.', 1.2);
+      }
+      if(d < 1.8 && Math.random() < 0.013){
+        setMessage('A voice whispers: “Watcher...”', 2.5);
+      }
+    }
+
+    function finishGame(won){
+      state = won ? 'win' : 'gameover';
+      endTitle.textContent = won ? 'Escaped' : 'Game Over';
+      endText.textContent = won
+        ? `${selectedName} reaches the broken exit. The mist opens for a moment... but the Watcher is still inside.`
+        : (player.fear >= 100 ? 'Fear overwhelms the mind. The corridor becomes endless.' : 'The mist has caught the Watcher.');
+      endOverlay.style.display = 'flex';
+    }
+
+    function draw(){
+      const w = canvas.width, h = canvas.height;
+      drawSkyFloor(w,h);
+      raycastWalls(w,h);
+      drawSprites(w,h);
+      drawAtmosphere(w,h);
+      drawHand(w,h);
+      if(showMiniMap) drawMiniMap(w,h);
+    }
+
+    function drawSkyFloor(w,h){
+      const horizon = h/2 + Math.sin(player.bob)*3;
+      const gradTop = ctx.createLinearGradient(0,0,0,horizon);
+      gradTop.addColorStop(0,'#020304');
+      gradTop.addColorStop(1,'#111a1d');
+      ctx.fillStyle = gradTop; ctx.fillRect(0,0,w,horizon);
+      const gradBottom = ctx.createLinearGradient(0,horizon,0,h);
+      gradBottom.addColorStop(0,'#10191b'); gradBottom.addColorStop(1,'#020303');
+      ctx.fillStyle = gradBottom; ctx.fillRect(0,horizon,w,h-horizon);
+      // corridor floor perspective lines
+      ctx.strokeStyle = 'rgba(165,220,230,.045)';
+      ctx.lineWidth = Math.max(1,w/900);
+      for(let i=0;i<22;i++){
+        const yy = horizon + (h-horizon)*Math.pow(i/22,1.9);
+        ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(w, yy); ctx.stroke();
+      }
+      for(let i=-10;i<=10;i++){
+        const sx = w/2 + i*w/16 + Math.sin(player.angle*2)*20;
+        ctx.beginPath(); ctx.moveTo(w/2,horizon); ctx.lineTo(sx,h); ctx.stroke();
+      }
+    }
+
+    function raycastWalls(w,h){
+      const step = Math.max(1, Math.floor(w/620));
+      zBuffer = new Float32Array(w);
+      for(let x=0; x<w; x+=step){
+        const rayAngle = player.angle - FOV/2 + (x/w)*FOV;
+        const sin = Math.sin(rayAngle), cos = Math.cos(rayAngle);
+        let depth = 0.02, hit = false, shadeSide = 0;
+        let lastCellX = Math.floor(player.x), lastCellY = Math.floor(player.y);
+        while(depth < MAX_DEPTH){
+          const rx = player.x + cos*depth;
+          const ry = player.y + sin*depth;
+          const cx = Math.floor(rx), cy = Math.floor(ry);
+          if(cx !== lastCellX){ shadeSide = 1; lastCellX = cx; }
+          if(cy !== lastCellY){ shadeSide = 0; lastCellY = cy; }
+          if(isWall(rx,ry)){ hit = true; break; }
+          depth += 0.026;
+        }
+        let corrected = depth * Math.cos(rayAngle - player.angle);
+        corrected = Math.max(0.04, corrected);
+        const wallH = Math.min(h*2.2, h / corrected * 0.82);
+        const wallTop = h/2 - wallH/2 + Math.sin(player.bob)*3;
+        const wallBottom = wallTop + wallH;
+        const fogFade = clamp(1 - corrected/MAX_DEPTH, .04, 1);
+        const shade = Math.floor((shadeSide?92:118) * fogFade + 8);
+        const cyan = Math.floor(24 * fogFade);
+        ctx.fillStyle = `rgb(${shade},${shade+cyan},${shade+cyan+8})`;
+        ctx.fillRect(x, wallTop, step+1, wallH);
+        // brick/corridor texture bands
+        if(hit && corrected < 9){
+          ctx.fillStyle = `rgba(0,0,0,${0.17 + corrected*0.018})`;
+          const bandH = Math.max(4, wallH/7);
+          for(let by=wallTop + bandH; by<wallBottom; by+=bandH){ ctx.fillRect(x,by,step+1,1); }
+          if((Math.floor(x/24)+Math.floor(corrected*2))%2===0){ ctx.fillRect(x,wallTop,1,wallH); }
+        }
+        for(let xx=x; xx<x+step && xx<w; xx++) zBuffer[xx] = corrected;
+      }
+    }
+
+    function projectSprite(obj){
+      const dx = obj.x - player.x, dy = obj.y - player.y;
+      const distance = Math.hypot(dx,dy);
+      const angle = normAngle(Math.atan2(dy,dx) - player.angle);
+      if(Math.abs(angle) > FOV*0.62 || distance < 0.12 || distance > MAX_DEPTH) return null;
+      const screenX = (0.5 + angle / FOV) * canvas.width;
+      const size = canvas.height / distance * (obj.scale || 0.55);
+      const screenY = canvas.height/2 - size*0.45 + (obj.yOffset || 0);
+      const zIndex = Math.floor(clamp(screenX,0,canvas.width-1));
+      if(zBuffer && zBuffer[zIndex] < distance - 0.25) return null;
+      return {x:screenX,y:screenY,size,distance,angle};
+    }
+
+    function drawSprites(w,h){
+      const drawables = [];
+      for(const s of symbols){ if(!s.collected) drawables.push({...s,type:'symbol',scale:0.42}); }
+      drawables.push({x:exitGate.x,y:exitGate.y,type:'exit',scale:0.8});
+      drawables.push({x:enemy.x,y:enemy.y,type:'enemy',scale:0.95});
+      drawables.sort((a,b)=>dist(player.x,player.y,b.x,b.y)-dist(player.x,player.y,a.x,a.y));
+      for(const obj of drawables){
+        const p = projectSprite(obj);
+        if(!p) continue;
+        if(obj.type==='symbol') drawSymbol(p);
+        else if(obj.type==='exit') drawExit(p);
+        else if(obj.type==='enemy') drawEnemy(p);
+      }
+    }
+
+    function drawSymbol(p){
+      const s = p.size;
+      const x = p.x, y = p.y;
+      const pulse = 1 + Math.sin(time*4 + p.distance)*0.08;
+      ctx.save();
+      ctx.translate(x,y); ctx.scale(pulse,pulse); ctx.rotate(time*0.6);
+      const glow = ctx.createRadialGradient(0,0,s*0.05,0,0,s*0.55);
+      glow.addColorStop(0,'rgba(255,235,150,.9)'); glow.addColorStop(0.45,'rgba(255,211,110,.25)'); glow.addColorStop(1,'rgba(255,211,110,0)');
+      ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(0,0,s*0.65,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,220,115,.95)'; ctx.lineWidth = Math.max(2,s*0.035);
+      ctx.beginPath();
+      for(let i=0;i<3;i++){
+        const a = -Math.PI/2 + i*Math.PI*2/3;
+        const px = Math.cos(a)*s*.28, py = Math.sin(a)*s*.28;
+        if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+      }
+      ctx.closePath(); ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawExit(p){
+      const s = p.size;
+      const x = p.x, y = p.y - s*0.05;
+      ctx.save(); ctx.translate(x,y);
+      const open = exitGate.open;
+      const glow = ctx.createRadialGradient(0,0,s*.1,0,0,s*.7);
+      glow.addColorStop(0, open?'rgba(156,243,255,.55)':'rgba(255,80,80,.35)');
+      glow.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(0,0,s*.72,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle = open ? 'rgba(156,243,255,.95)' : 'rgba(255,80,80,.88)';
+      ctx.lineWidth = Math.max(3,s*.035);
+      ctx.strokeRect(-s*.28,-s*.48,s*.56,s*.86);
+      ctx.beginPath(); ctx.moveTo(-s*.20,-s*.05); ctx.lineTo(s*.20,-s*.05); ctx.stroke();
+      ctx.font = `${Math.max(12,s*.13)}px Georgia`;
+      ctx.textAlign='center'; ctx.fillStyle = open ? '#dffbff' : '#ffb2b2';
+      ctx.fillText(open?'EXIT':'LOCK',0,s*.58);
+      ctx.restore();
+    }
+
+    function drawEnemy(p){
+      const s = p.size;
+      const x = p.x, y = p.y;
+      ctx.save(); ctx.translate(x,y);
+      const pulse = 1 + Math.sin(enemy.pulse)*0.08;
+      ctx.scale(pulse,pulse);
+      const fog = ctx.createRadialGradient(0,0,s*.06,0,0,s*.62);
+      fog.addColorStop(0,'rgba(225,245,255,.24)'); fog.addColorStop(.32,'rgba(145,170,180,.22)'); fog.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = fog; ctx.beginPath(); ctx.arc(0,0,s*.62,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(0,0,0,.58)'; ctx.beginPath(); ctx.ellipse(0,0,s*.22,s*.18,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,72,96,.95)';
+      ctx.beginPath(); ctx.arc(-s*.075,-s*.035,Math.max(2,s*.025),0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(s*.075,-s*.035,Math.max(2,s*.025),0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+
+    function drawAtmosphere(w,h){
+      // moving fog layers across the 3D corridor
+      ctx.save();
+      for(let i=0;i<36;i++){
+        const px = (Math.sin(time*.12+i*9.7)*0.5+0.5)*w;
+        const py = ((i*67 + time*22*(i%3+1)) % (h+180))-90;
+        const sw = 120 + (i%5)*55;
+        const sh = 20 + (i%4)*10;
+        ctx.fillStyle = `rgba(190,215,220,${0.018 + (i%4)*0.008})`;
+        ctx.beginPath(); ctx.ellipse(px,py,sw,sh,Math.sin(i)*0.5,0,Math.PI*2); ctx.fill();
+      }
+      const danger = clamp(player.fear/100,0,1);
+      const vignette = ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.18,w/2,h/2,Math.max(w,h)*0.66);
+      vignette.addColorStop(0, torchOn?'rgba(0,0,0,.05)':'rgba(0,0,0,.12)');
+      vignette.addColorStop(.68,`rgba(0,0,0,${0.25 + danger*.18})`);
+      vignette.addColorStop(1,`rgba(${Math.floor(danger*80)},0,0,${0.76 + danger*.16})`);
+      ctx.fillStyle = vignette; ctx.fillRect(0,0,w,h);
+      if(torchOn && player.torch > 0){
+        ctx.globalCompositeOperation = 'screen';
+        const beam = ctx.createRadialGradient(w/2,h*.55,10,w/2,h*.55,w*.38*player.torchPower);
+        beam.addColorStop(0,'rgba(255,246,190,.18)'); beam.addColorStop(1,'rgba(255,246,190,0)');
+        ctx.fillStyle = beam; ctx.fillRect(0,0,w,h);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+      if(player.fear > 72){
+        ctx.fillStyle = `rgba(255,0,20,${(player.fear-72)/28*.10})`;
+        ctx.fillRect(0,0,w,h);
+      }
+      ctx.restore();
+    }
+
+    function drawHand(w,h){
+      const data = CHARACTERS[selectedName];
+      const bob = Math.sin(player.bob)*10;
+      const cx = w * .58, cy = h * .93 + bob;
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(-0.12 + Math.sin(player.bob*.5)*.02);
+      ctx.fillStyle = 'rgba(12,14,15,.86)';
+      ctx.beginPath(); ctx.ellipse(0,0,w*.11,h*.08,0,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle = torchOn ? 'rgba(255,233,140,.9)' : 'rgba(156,243,255,.55)';
+      ctx.lineWidth = Math.max(2,w*.004);
+      ctx.beginPath(); ctx.arc(0,0,w*.045,0,Math.PI*2); ctx.stroke();
+      ctx.font = `${Math.max(18,w*.028)}px Georgia`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillStyle = torchOn ? '#fff1a4' : '#9cf3ff';
+      ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = torchOn ? 20 : 10;
+      ctx.fillText(data.mark,0,0);
+      ctx.restore();
+    }
+
+    function drawMiniMap(w,h){
+      const size = Math.min(190, w*.18);
+      const cell = size / MAP_W;
+      const x0 = w - size - 18, y0 = h - size - 18;
+      ctx.save();
+      ctx.globalAlpha = .80;
+      ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(x0-8,y0-8,size+16,size+16);
+      for(let y=0;y<MAP_H;y++) for(let x=0;x<MAP_W;x++){
+        ctx.fillStyle = MAP[y][x] === '1' ? 'rgba(190,220,225,.26)' : 'rgba(20,35,40,.42)';
+        ctx.fillRect(x0+x*cell,y0+y*cell,cell+.4,cell+.4);
+      }
+      for(const s of symbols){ if(!s.collected){ ctx.fillStyle='#ffd36e'; ctx.beginPath(); ctx.arc(x0+s.x*cell,y0+s.y*cell,cell*.28,0,Math.PI*2); ctx.fill(); }}
+      ctx.fillStyle = exitGate.open ? '#9cf3ff' : '#ff5c5c'; ctx.fillRect(x0+(exitGate.x-.22)*cell,y0+(exitGate.y-.22)*cell,cell*.44,cell*.44);
+      ctx.fillStyle='#ff4e64'; ctx.beginPath(); ctx.arc(x0+enemy.x*cell,y0+enemy.y*cell,cell*.32,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(x0+player.x*cell,y0+player.y*cell,cell*.34,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#ffffff'; ctx.beginPath(); ctx.moveTo(x0+player.x*cell,y0+player.y*cell); ctx.lineTo(x0+(player.x+Math.cos(player.angle)*.8)*cell,y0+(player.y+Math.sin(player.angle)*.8)*cell); ctx.stroke();
+      ctx.restore();
+    }
+
+    function loop(now){
+      if(state !== 'playing') return;
+      const dt = Math.min(0.045, (now - lastTime) / 1000 || 0.016);
+      lastTime = now;
+      updateGame(dt);
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    function toggleTorch(){
+      if(state !== 'playing') return;
+      if(player.torch <= 3){ setMessage('Torch battery is empty. Wait for it to recover.', 2); return; }
+      torchOn = !torchOn;
+      setMessage(torchOn ? 'Torch raised. The mist slows when you face it.' : 'Torch lowered. Battery starts recovering.', 1.8);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if(['arrowup','arrowdown','arrowleft','arrowright',' ','w','a','s','d','q','e','f','r','m','escape'].includes(k)) e.preventDefault();
+      if(k === 'f' && !e.repeat){ toggleTorch(); return; }
+      if(k === 'r' && state === 'playing'){ resetGame(); return; }
+      if(k === 'm' && state === 'playing'){ showMiniMap = !showMiniMap; return; }
+      if(k === 'escape' && state === 'playing'){ setMessage('No pause menu yet. Keep moving; the mist will not wait.', 2); return; }
+      keys[k] = true;
+    });
+    document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+    canvas.addEventListener('pointerdown', (e)=>{ pointerDragging = true; lastPointerX = e.clientX; canvas.setPointerCapture(e.pointerId); canvas.focus(); });
+    canvas.addEventListener('pointerup', ()=>{ pointerDragging = false; });
+    canvas.addEventListener('pointercancel', ()=>{ pointerDragging = false; });
+    canvas.addEventListener('pointermove', (e)=>{
+      if(!pointerDragging || state !== 'playing') return;
+      const dx = e.clientX - lastPointerX; lastPointerX = e.clientX;
+      player.angle = normAngle(player.angle + dx * 0.0042);
+    });
+
+    document.querySelectorAll('[data-hold]').forEach(btn=>{
+      const action = btn.getAttribute('data-hold');
+      const start = (e)=>{ e.preventDefault(); hold[action] = true; canvas.focus(); };
+      const end = (e)=>{ e.preventDefault(); hold[action] = false; };
+      btn.addEventListener('pointerdown', start); btn.addEventListener('pointerup', end); btn.addEventListener('pointerleave', end); btn.addEventListener('pointercancel', end);
+    });
+    touchTorch.addEventListener('click', toggleTorch);
+
+    startButton.addEventListener('click', startGame);
+    retryButton.addEventListener('click', () => { resetGame(); canvas.focus(); requestAnimationFrame(loop); });
+    selectAgainButton.addEventListener('click', () => {
+      state = 'select';
+      endOverlay.style.display = 'none';
+      gameScreen.style.display = 'none';
+      selectScreen.style.display = 'flex';
+      buildCards();
+    });
+
+    buildCards();
   </script>
 </body>
 </html>
