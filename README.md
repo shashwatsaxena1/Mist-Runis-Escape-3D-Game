@@ -1,40 +1,28 @@
-# Rumours of the Mist: Escape — V1 3D Build
+# Rumours of the Mist: Escape — V2.1 Fixed Build
 
-This build fixes the previous issue by moving the game into a first-person 3D-style mist corridor and adding a proper character selection screen first.
+This build fixes the broken character images by embedding the colorful character cards directly inside the game file. It also adds a visible animated selected-character presence during gameplay so the chosen character clearly moves while you explore the 3D Mist Corridor.
 
 ## How to run
-
-1. Extract the ZIP.
-2. Open `index.html` in Chrome/Edge.
-3. Choose Yash, Vijaya, Mikasa, Sam, or Raj.
+1. Extract the zip.
+2. Open `rumours_mist_escape_v2_FIXED_SELF/index.html` in Chrome/Edge.
+3. Choose a character.
 4. Click **Start Game**.
-5. Click once inside the game if the keyboard does not respond immediately.
+5. Hold **W** or **Arrow Up** to walk forward.
 
 ## Controls
+- W / Arrow Up: Walk forward
+- S / Arrow Down: Walk backward
+- A / Arrow Left: Turn left
+- D / Arrow Right: Turn right
+- Q / E: Strafe left/right
+- F: Toggle torch
+- M: Toggle mini-map
+- R: Restart
 
-- W / Arrow Up: move forward
-- S / Arrow Down: move backward
-- A / Arrow Left: turn left
-- D / Arrow Right: turn right
-- Q: strafe left
-- E: strafe right
-- F: toggle torch
-- R: restart
-- M: toggle mini-map
-- Mouse/touch drag: turn camera
-
-## Goal
-
-Collect 5 Natural Energy symbols, then reach the exit gate. The exit stays locked until all symbols are collected.
-
-## Character differences
-
-- Yash: balanced
-- Vijaya: fast explorer
-- Mikasa: stronger fear control
-- Sam: higher health and stronger torch
-- Raj: fastest but fear rises faster
-
-## Notes
-
-This version uses only HTML, CSS, and JavaScript. No internet, package install, or external game engine is required.
+## Fixes in this version
+- Character cards are no longer blank.
+- No missing white-background character images.
+- HUD avatar loads correctly.
+- Visible animated selected character is shown in-game.
+- Movement instructions are clearer.
+- Game remains a 3D mist corridor prototype with fog, sound, symbols, exit, enemy, health, fear, and torch.
