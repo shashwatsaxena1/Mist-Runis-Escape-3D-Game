@@ -72,12 +72,77 @@
     .overlayBox{max-width:680px;border:1px solid rgba(255,211,110,.4);border-radius:22px;background:linear-gradient(180deg,rgba(12,18,20,.96),rgba(0,0,0,.96));padding:28px;box-shadow:0 0 54px rgba(0,0,0,.9)}
     .overlayBox h2{font-size:44px;margin:0 0 10px;text-transform:uppercase}.overlayBox p{color:#d8edf4;line-height:1.6}.overlayActions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
     .mobileControls{position:fixed;left:0;right:0;bottom:12px;display:none;justify-content:space-between;align-items:end;padding:0 16px;z-index:5;pointer-events:none}.pad{display:grid;grid-template-columns:58px 58px 58px;gap:8px;pointer-events:auto}.pad button{width:58px;height:52px;border-radius:15px;border:1px solid rgba(156,243,255,.25);background:rgba(0,0,0,.42);color:#e9fbff;font-size:20px}.pad .wide{grid-column:span 3;width:190px}.pad .blank{visibility:hidden}.touchTorch{pointer-events:auto;width:82px;height:82px;border-radius:50%;border:1px solid rgba(255,211,110,.45);background:rgba(0,0,0,.45);color:var(--gold);font-weight:bold}
+
+    .menuBox,.loadingBox{width:min(980px,100%);border:1px solid rgba(156,243,255,.18);border-radius:28px;background:linear-gradient(180deg,rgba(5,10,12,.86),rgba(2,4,5,.92));box-shadow:0 0 42px rgba(0,0,0,.72);padding:34px;position:relative;overflow:hidden;backdrop-filter:blur(10px)}
+    .menuBox:before,.loadingBox:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at top, rgba(156,243,255,.08), transparent 45%),radial-gradient(circle at 90% 15%, rgba(255,211,110,.08), transparent 25%);pointer-events:none}
+    #menuScreen{background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.55)), url('assets/select_bg.png') center/cover no-repeat fixed}
+    .menuHero{display:grid;grid-template-columns:1.3fr .9fr;gap:26px;align-items:center}
+    .menuHero h1{font-size:clamp(42px,7vw,76px);letter-spacing:.04em;margin:0 0 10px;text-transform:uppercase}
+    .menuHero p{color:#d7edf4;line-height:1.7;font-size:17px}
+    .menuBadge{display:inline-block;padding:8px 14px;border:1px solid rgba(255,211,110,.32);border-radius:999px;color:var(--gold);background:rgba(255,211,110,.07);font-weight:bold;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+    .chapterCard{border:1px solid rgba(156,243,255,.16);border-radius:22px;background:linear-gradient(180deg,rgba(10,16,19,.88),rgba(4,8,10,.92));padding:22px}
+    .chapterCard h3{margin:0 0 10px;font-size:28px;color:var(--gold)}
+    .chapterCard ul{margin:10px 0 0 18px;color:#d9edf4;line-height:1.7}
+    .menuActions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .secondary{border:1px solid rgba(156,243,255,.24);border-radius:14px;background:rgba(5,13,16,.78);color:#e9fbff;padding:14px 20px;cursor:pointer;font-weight:bold;letter-spacing:.05em;text-transform:uppercase}
+    #loadingScreen{display:none;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.72)), url('assets/corridor_bg.png') center/cover no-repeat}
+    .loadingBox{text-align:center;max-width:760px}
+    .loadingBox h2{font-size:42px;margin:0 0 12px;text-transform:uppercase}
+    .loadingBar{width:min(520px,100%);height:16px;margin:18px auto 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(156,243,255,.18);overflow:hidden}
+    .loadingFill{height:100%;width:0%;background:linear-gradient(90deg,#84e2ff,#ffd36e)}
+    .loadingTip{color:#d4ebf2;opacity:.9}
+    .chapterOverlay,.pauseOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9;padding:20px;background:rgba(0,0,0,.66);backdrop-filter:blur(6px)}
+    .chapterBox,.pauseBox{max-width:760px;border:1px solid rgba(255,211,110,.3);border-radius:24px;background:linear-gradient(180deg,rgba(8,14,17,.96),rgba(2,5,6,.96));padding:30px;box-shadow:0 0 56px rgba(0,0,0,.82);text-align:center}
+    .chapterBox h2,.pauseBox h2{margin:0 0 12px;font-size:42px;text-transform:uppercase}
+    .chapterBox h3{margin:0 0 18px;color:var(--gold);letter-spacing:.06em;text-transform:uppercase}
+    .chapterBox p,.pauseBox p{color:#d6ebf2;line-height:1.75}
+    .pauseStats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 20px}
+    .pauseStat{border:1px solid rgba(156,243,255,.15);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}
+    .pauseStat strong{display:block;color:var(--gold);font-size:28px}
+    @media(max-width:900px){.menuHero{grid-template-columns:1fr}.pauseStats{grid-template-columns:1fr}}
+
     @media(max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}.card{min-height:345px}.selectBox{padding:16px}.hud{grid-template-columns:70px minmax(210px,1fr)}.avatar{width:70px;height:96px}.miniHelp{display:none}.mobileControls{display:flex}.objective{top:auto;bottom:112px;border-radius:16px}.message{bottom:188px}}
     @media(max-width:560px){.cards{grid-template-columns:1fr}.logo h1{font-size:34px}.hud{transform:scale(.88);transform-origin:top left}.mobileControls{display:flex}}
   </style>
 </head>
 <body>
-  <section id="selectScreen" class="screen">
+  <section id="menuScreen" class="screen">
+    <div class="menuBox">
+      <div class="menuHero">
+        <div>
+          <div class="menuBadge">Playable story build</div>
+          <h1>Rumours of the Mist</h1>
+          <p>Escape through a living ruin where the mist watches every move. This build adds a real <b>Chapter 1</b> flow, enemy attack feedback, upgraded ambience, and full game screens for loading and pause.</p>
+          <div class="menuActions">
+            <button id="menuStartButton" class="primary">New Game</button>
+            <button id="menuCharacterButton" class="secondary">Choose Character</button>
+          </div>
+        </div>
+        <div class="chapterCard">
+          <h3>Chapter 1 — Broken Entrance</h3>
+          <p>The entrance seals behind the group. A fragment of the ruins pulls you away into the first mist corridor. Collect Natural Energy symbols, resist fear, survive the living mist, and reopen the broken exit.</p>
+          <ul>
+            <li>3D mist corridor exploration</li>
+            <li>Enemy attack feedback and chase tension</li>
+            <li>Ambient drone + heartbeat tension audio</li>
+            <li>Pause, loading, and story intro screens</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="loadingScreen" class="screen">
+    <div class="loadingBox">
+      <div class="menuBadge">Loading mission</div>
+      <h2>Entering the Ruins</h2>
+      <p class="loadingTip">Preparing Chapter 1, aligning Natural Energy, and listening for the mist.</p>
+      <div class="loadingBar"><div id="loadingFill" class="loadingFill"></div></div>
+      <div id="loadingText" class="loadingTip">0%</div>
+    </div>
+  </section>
+
+  <section id="selectScreen" class="screen" style="display:none">
     <div class="selectBox">
       <div class="titleRow">
         <div class="logo">
@@ -110,7 +175,7 @@
       </div>
     </div>
     <div id="objective" class="objective">Collect 5 Natural Energy symbols. The exit opens only after all symbols are collected.</div>
-    <div class="miniHelp">WASD / Arrows<br>Q/E strafe<br>F torch<br>R restart</div>
+    <div class="miniHelp">WASD / Arrows<br>Q/E strafe<br>F torch<br>P / Esc pause<br>R restart</div>
     <div id="message" class="message">The corridor breathes. Move forward carefully.</div>
     <div class="soundBadge">Enhanced art build</div>
     <div class="mobileControls">
@@ -124,6 +189,34 @@
         <button class="wide" data-hold="strafeRight">Strafe Right</button>
         <button class="blank"> </button><button data-hold="forward">▲</button><button class="blank"> </button>
         <button data-hold="turnLeft">◀</button><button data-hold="backward">▼</button><button data-hold="turnRight">▶</button>
+      </div>
+    </div>
+    <div id="chapterOverlay" class="chapterOverlay">
+      <div class="chapterBox">
+        <div class="menuBadge">Story mission</div>
+        <h2>Chapter 1</h2>
+        <h3>Broken Entrance</h3>
+        <p>The ruins have sealed behind you. The corridor ahead is only a fragment of something much larger. Gather the Natural Energy symbols, keep fear under control, and find the broken exit before the living mist reaches you.</p>
+        <div class="overlayActions">
+          <button id="beginChapterButton" class="primary">Begin Chapter</button>
+        </div>
+      </div>
+    </div>
+    <div id="pauseOverlay" class="pauseOverlay">
+      <div class="pauseBox">
+        <div class="menuBadge">Paused</div>
+        <h2>Mist Pause</h2>
+        <p>The corridor waits, but the fear remains. Resume when you are ready.</p>
+        <div class="pauseStats">
+          <div class="pauseStat"><span>Health</span><strong id="pauseHealth">100</strong></div>
+          <div class="pauseStat"><span>Fear</span><strong id="pauseFear">0%</strong></div>
+          <div class="pauseStat"><span>Symbols</span><strong id="pauseSymbols">0/5</strong></div>
+        </div>
+        <div class="overlayActions">
+          <button id="resumeButton" class="primary">Resume</button>
+          <button id="pauseRestartButton" class="ghost">Restart Chapter</button>
+          <button id="pauseMenuButton" class="secondary">Main Menu</button>
+        </div>
       </div>
     </div>
     <div id="endOverlay" class="overlay">
@@ -171,6 +264,8 @@
 
     const characterCards = document.getElementById('characterCards');
     const startButton = document.getElementById('startButton');
+    const menuScreen = document.getElementById('menuScreen');
+    const loadingScreen = document.getElementById('loadingScreen');
     const selectScreen = document.getElementById('selectScreen');
     const gameScreen = document.getElementById('gameScreen');
     const canvas = document.getElementById('gameCanvas');
@@ -192,6 +287,19 @@
     const retryButton = document.getElementById('retryButton');
     const selectAgainButton = document.getElementById('selectAgainButton');
     const touchTorch = document.getElementById('touchTorch');
+    const menuStartButton = document.getElementById('menuStartButton');
+    const menuCharacterButton = document.getElementById('menuCharacterButton');
+    const loadingFill = document.getElementById('loadingFill');
+    const loadingText = document.getElementById('loadingText');
+    const chapterOverlay = document.getElementById('chapterOverlay');
+    const beginChapterButton = document.getElementById('beginChapterButton');
+    const pauseOverlay = document.getElementById('pauseOverlay');
+    const pauseHealth = document.getElementById('pauseHealth');
+    const pauseFear = document.getElementById('pauseFear');
+    const pauseSymbols = document.getElementById('pauseSymbols');
+    const resumeButton = document.getElementById('resumeButton');
+    const pauseRestartButton = document.getElementById('pauseRestartButton');
+    const pauseMenuButton = document.getElementById('pauseMenuButton');
 
     const imgCache = {};
     for (const [name, src] of Object.entries(CHARACTER_IMAGES)) {
@@ -231,9 +339,10 @@
     const MAP_H = MAP.length;
     const FOV = Math.PI / 3.05;
     const MAX_DEPTH = 18;
+    const LEVEL = { chapter:'Chapter 1', title:'Broken Entrance', intro:'The ruins have sealed behind you. Gather every Natural Energy symbol and reopen the broken exit.' };
     const TOTAL_SYMBOLS = 5;
 
-    let state = 'select';
+    let state = 'menu';
     let player, enemy, symbols, exitGate, torchOn, lastTime, messageTimer, zBuffer, showMiniMap;
     const keys = Object.create(null);
     const hold = {forward:false, backward:false, turnLeft:false, turnRight:false, strafeLeft:false, strafeRight:false};
@@ -241,7 +350,7 @@
     let lastPointerX = 0;
     let time = 0;
     let decorations = [];
-    let audioCtx = null, masterGain = null, droneGain = null, lastStepSfx = 0, lastDamageSfx = 0;
+    let audioCtx = null, masterGain = null, droneGain = null, windGain = null, chaseGain = null, lastStepSfx = 0, lastDamageSfx = 0;
 
     function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
     function lerp(a,b,t){ return a + (b-a)*t; }
@@ -262,27 +371,54 @@
     }
     function setMessage(text, seconds=3){ messageEl.textContent = text; messageTimer = seconds; }
 
+    function createNoiseBuffer(){
+      const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for(let i=0;i<data.length;i++) data[i] = (Math.random()*2-1) * 0.28;
+      return buffer;
+    }
+
     function startAudio(){
       try{
         if(audioCtx){ if(audioCtx.state === 'suspended') audioCtx.resume(); return; }
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.16;
+        masterGain.gain.value = 0.18;
         masterGain.connect(audioCtx.destination);
+
         droneGain = audioCtx.createGain();
-        droneGain.gain.value = 0.18;
+        droneGain.gain.value = 0.14;
         droneGain.connect(masterGain);
         const osc1 = audioCtx.createOscillator();
         const osc2 = audioCtx.createOscillator();
-        osc1.type = 'sine'; osc2.type = 'triangle';
-        osc1.frequency.value = 47; osc2.frequency.value = 73;
-        osc1.connect(droneGain); osc2.connect(droneGain);
-        osc1.start(); osc2.start();
-        // slow breathing tremolo for the mist ambience
+        const osc3 = audioCtx.createOscillator();
+        osc1.type = 'sine'; osc2.type = 'triangle'; osc3.type = 'sawtooth';
+        osc1.frequency.value = 46; osc2.frequency.value = 69; osc3.frequency.value = 92;
+        osc1.connect(droneGain); osc2.connect(droneGain); osc3.connect(droneGain);
+        osc1.start(); osc2.start(); osc3.start();
         const trem = audioCtx.createOscillator();
         const tremGain = audioCtx.createGain();
-        trem.frequency.value = 0.09; tremGain.gain.value = 0.06;
+        trem.frequency.value = 0.09; tremGain.gain.value = 0.05;
         trem.connect(tremGain); tremGain.connect(droneGain.gain); trem.start();
+
+        windGain = audioCtx.createGain();
+        windGain.gain.value = 0.0;
+        windGain.connect(masterGain);
+        const noiseSource = audioCtx.createBufferSource();
+        noiseSource.buffer = createNoiseBuffer();
+        noiseSource.loop = true;
+        const noiseFilter = audioCtx.createBiquadFilter();
+        noiseFilter.type = 'lowpass'; noiseFilter.frequency.value = 420;
+        noiseSource.connect(noiseFilter); noiseFilter.connect(windGain); noiseSource.start();
+
+        chaseGain = audioCtx.createGain();
+        chaseGain.gain.value = 0.0;
+        chaseGain.connect(masterGain);
+        const heart = audioCtx.createOscillator();
+        heart.type = 'square'; heart.frequency.value = 2.1;
+        const heartShaper = audioCtx.createGain();
+        heartShaper.gain.value = 0.0;
+        heart.connect(heartShaper); heartShaper.connect(chaseGain); heart.start();
       } catch(err){ console.warn('Audio could not start:', err); }
     }
 
@@ -309,6 +445,16 @@
       osc.start(now); osc.stop(now + dur + .04);
     }
 
+    function updateSoundscape(){
+      if(!audioCtx || !masterGain) return;
+      const d = enemy ? dist(player.x,player.y,enemy.x,enemy.y) : 10;
+      const chase = clamp((6.2 - d)/6.2, 0, 1);
+      const fearAmt = clamp(player.fear/100,0,1);
+      if(droneGain) droneGain.gain.setTargetAtTime(0.11 + fearAmt*0.04, audioCtx.currentTime, 0.3);
+      if(windGain) windGain.gain.setTargetAtTime(0.02 + fearAmt*0.05 + (torchOn?0:0.02), audioCtx.currentTime, 0.3);
+      if(chaseGain) chaseGain.gain.setTargetAtTime(chase*0.05 + fearAmt*0.03, audioCtx.currentTime, 0.18);
+    }
+
     function buildCards(){
       characterCards.innerHTML = '';
       for(const [name, data] of Object.entries(CHARACTERS)){
@@ -328,6 +474,91 @@
       selectedName = name;
       buildCards();
       startButton.textContent = 'Start Game as ' + name;
+    }
+
+    function showMenu(){
+      state = 'menu';
+      menuScreen.style.display = 'flex';
+      selectScreen.style.display = 'none';
+      loadingScreen.style.display = 'none';
+      gameScreen.style.display = 'none';
+      chapterOverlay.style.display = 'none';
+      pauseOverlay.style.display = 'none';
+      endOverlay.style.display = 'none';
+      loopStarted = false;
+    }
+
+    function showCharacterSelect(){
+      state = 'select';
+      menuScreen.style.display = 'none';
+      loadingScreen.style.display = 'none';
+      selectScreen.style.display = 'flex';
+      gameScreen.style.display = 'none';
+      chapterOverlay.style.display = 'none';
+      pauseOverlay.style.display = 'none';
+      endOverlay.style.display = 'none';
+      loopStarted = false;
+    }
+
+    function updatePauseStats(){
+      if(!player) return;
+      pauseHealth.textContent = Math.ceil(player.health);
+      pauseFear.textContent = Math.round(player.fear) + '%';
+      pauseSymbols.textContent = `${player.collected}/${TOTAL_SYMBOLS}`;
+    }
+
+    function showChapterIntro(){
+      state = 'chapterIntro';
+      chapterOverlay.style.display = 'flex';
+      setMessage(`${LEVEL.chapter} — ${LEVEL.title}. The corridor opens ahead.`, 3.6);
+    }
+
+    function beginChapter(){
+      state = 'playing';
+      chapterOverlay.style.display = 'none';
+      lastTime = performance.now();
+      canvas.focus();
+      setMessage('Chapter 1 begins. Collect the symbols and survive the mist.', 3.2);
+    }
+
+    function togglePause(force){
+      if(!gameScreen || gameScreen.style.display === 'none') return;
+      if(state === 'playing' || force === true){
+        Object.keys(keys).forEach(k => keys[k]=false);
+        state = 'paused';
+        updatePauseStats();
+        pauseOverlay.style.display = 'flex';
+        setMessage('Paused. The corridor waits.', 2);
+      } else if(state === 'paused' || force === false){
+        pauseOverlay.style.display = 'none';
+        state = 'playing';
+        lastTime = performance.now();
+        canvas.focus();
+      }
+    }
+
+    function startLoadingThenGame(){
+      menuScreen.style.display = 'none';
+      selectScreen.style.display = 'none';
+      loadingScreen.style.display = 'flex';
+      loadingFill.style.width = '0%';
+      loadingText.textContent = '0%';
+      let progress = 0;
+      const timer = setInterval(() => {
+        progress += 8 + Math.random()*12;
+        if(progress > 100) progress = 100;
+        loadingFill.style.width = progress.toFixed(0) + '%';
+        loadingText.textContent = Math.floor(progress) + '%';
+        if(progress >= 100){
+          clearInterval(timer);
+          loadingScreen.style.display = 'none';
+          gameScreen.style.display = 'flex';
+          resizeCanvas();
+          resetGame();
+          showChapterIntro();
+          if(!loopStarted){ loopStarted = true; lastTime = performance.now(); requestAnimationFrame(loop); }
+        }
+      }, 110);
     }
 
     function resizeCanvas(){
@@ -375,8 +606,9 @@
       torchOn = false;
       showMiniMap = true;
       messageTimer = 4;
-      setMessage(`${selectedName} enters the mist corridor. Hold W/↑ to walk forward. A/D turns. Q/E strafes.`, 4.5);
+      setMessage(`${selectedName} enters ${LEVEL.title}. Hold W/↑ to walk forward. A/D turns. Q/E strafes.`, 4.5);
       updateHUD();
+      updateSoundscape();
       endOverlay.style.display = 'none';
       state = 'playing';
       lastTime = performance.now();
@@ -386,12 +618,7 @@
       startAudio();
       hudAvatar.src = CHARACTER_AVATARS[selectedName] || CHARACTER_IMAGES[selectedName];
       hudName.textContent = selectedName;
-      selectScreen.style.display = 'none';
-      gameScreen.style.display = 'flex';
-      resizeCanvas();
-      resetGame();
-      canvas.focus();
-      requestAnimationFrame(loop);
+      startLoadingThenGame();
     }
 
     function updateHUD(){
@@ -406,9 +633,9 @@
       torchText.textContent = Math.round(torchPct);
       symbolText.textContent = `Symbols ${player.collected}/${TOTAL_SYMBOLS}`;
       if(player.collected >= TOTAL_SYMBOLS){
-        objective.textContent = 'All symbols collected. Find the exit gate before the mist catches you.';
+        objective.textContent = `${LEVEL.chapter}: All symbols collected. Find the broken exit before the mist catches you.`;
       } else {
-        objective.textContent = `Collect ${TOTAL_SYMBOLS - player.collected} more Natural Energy symbol${TOTAL_SYMBOLS-player.collected===1?'':'s'}. Then reach the exit.`;
+        objective.textContent = `${LEVEL.chapter}: Collect ${TOTAL_SYMBOLS - player.collected} more Natural Energy symbol${TOTAL_SYMBOLS-player.collected===1?'':'s'}. Then reach the exit.`;
       }
     }
 
@@ -444,6 +671,7 @@
         messageTimer -= dt;
         if(messageTimer <= 0) messageEl.textContent = 'The mist moves through the walls. Keep moving.';
       }
+      attackFlash = Math.max(0, attackFlash - dt*1.9);
       handleInput(dt);
       updateTorch(dt);
       updateSymbols();
@@ -457,6 +685,7 @@
         finishGame(false);
       }
       updateHUD();
+      updateSoundscape();
     }
 
     function updateTorch(dt){
@@ -548,11 +777,12 @@
       player.fear = clamp(player.fear + fearDelta*dt, 0, 100);
       if(d < 0.74){
         player.health -= (18 + player.collected*2) * dt;
+        attackFlash = Math.min(1, attackFlash + dt*4.4);
         if(time - lastDamageSfx > 0.7){ playSfx('hit'); lastDamageSfx = time; }
-        setMessage('The living mist is touching you. Run or face it with the torch.', 1.2);
+        setMessage('The living mist strikes. Turn, run, or push it back with the torch.', 1.2);
       }
       if(d < 1.8 && Math.random() < 0.013){
-        setMessage('A voice whispers: “Watcher...”', 2.5);
+        setMessage('A voice whispers from the wall: “Watcher...”', 2.5);
       }
     }
 
@@ -572,6 +802,7 @@
       raycastWalls(w,h);
       drawSprites(w,h);
       drawAtmosphere(w,h);
+      drawAttackOverlay(w,h);
       drawActiveCharacter(w,h);
       drawHand(w,h);
       if(showMiniMap) drawMiniMap(w,h);
@@ -858,6 +1089,25 @@
     }
 
 
+    function drawAttackOverlay(w,h){
+      const danger = clamp(player.fear/100,0,1);
+      const flash = Math.max(attackFlash, danger*0.18);
+      if(flash <= 0.01) return;
+      ctx.save();
+      ctx.fillStyle = `rgba(120,0,10,${flash*0.14})`;
+      ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle = `rgba(255,90,110,${attackFlash*0.65})`;
+      ctx.lineWidth = Math.max(3,w*.004);
+      for(let i=0;i<3;i++){
+        const offset = i*28 + Math.sin(time*7+i)*8;
+        ctx.beginPath();
+        ctx.moveTo(w*0.72 + offset, h*0.22 + i*20);
+        ctx.lineTo(w*0.60 + offset*0.6, h*0.38 + i*36);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
     function drawActiveCharacter(w,h){
       const c = CHARACTER_COLORS[selectedName] || CHARACTER_COLORS.Yash;
       const moving = keys['w'] || keys['arrowup'] || keys['s'] || keys['arrowdown'] || keys['q'] || keys['e'] || hold.forward || hold.backward || hold.strafeLeft || hold.strafeRight;
@@ -997,10 +1247,10 @@
     }
 
     function loop(now){
-      if(state !== 'playing') return;
+      if(!['playing','paused','chapterIntro','win','gameover'].includes(state)) return;
       const dt = Math.min(0.045, (now - lastTime) / 1000 || 0.016);
       lastTime = now;
-      updateGame(dt);
+      if(state === 'playing') updateGame(dt);
       draw();
       requestAnimationFrame(loop);
     }
@@ -1015,11 +1265,12 @@
 
     document.addEventListener('keydown', (e) => {
       const k = e.key.toLowerCase();
-      if(['arrowup','arrowdown','arrowleft','arrowright',' ','w','a','s','d','q','e','f','r','m','escape'].includes(k)) e.preventDefault();
+      if(['arrowup','arrowdown','arrowleft','arrowright',' ','w','a','s','d','q','e','f','r','m','escape','p'].includes(k)) e.preventDefault();
+      if((k === 'escape' || k === 'p') && (state === 'playing' || state === 'paused')){ togglePause(); return; }
+      if(state === 'paused' || state === 'chapterIntro' || state === 'menu' || state === 'select') return;
       if(k === 'f' && !e.repeat){ toggleTorch(); return; }
       if(k === 'r' && state === 'playing'){ resetGame(); return; }
       if(k === 'm' && state === 'playing'){ showMiniMap = !showMiniMap; return; }
-      if(k === 'escape' && state === 'playing'){ setMessage('No pause menu yet. Keep moving; the mist will not wait.', 2); return; }
       keys[k] = true;
     });
     document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
