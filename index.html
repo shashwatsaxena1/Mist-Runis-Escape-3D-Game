@@ -102,6 +102,21 @@
     @media(max-width:900px){.menuHero{grid-template-columns:1fr}.pauseStats{grid-template-columns:1fr}}
 
     @media(max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}.card{min-height:345px}.selectBox{padding:16px}.hud{grid-template-columns:70px minmax(210px,1fr)}.avatar{width:70px;height:96px}.miniHelp{display:none}.mobileControls{display:flex}.objective{top:auto;bottom:112px;border-radius:16px}.message{bottom:188px}}
+
+    .settingsOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:11;padding:20px;background:rgba(0,0,0,.70);backdrop-filter:blur(7px)}
+    .settingsBox{width:min(820px,100%);border:1px solid rgba(255,211,110,.30);border-radius:24px;background:linear-gradient(180deg,rgba(7,14,17,.97),rgba(2,5,6,.98));box-shadow:0 0 58px rgba(0,0,0,.85);padding:26px;position:relative;overflow:hidden}
+    .settingsBox:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,rgba(156,243,255,.08),transparent 35%),radial-gradient(circle at 85% 10%,rgba(255,211,110,.07),transparent 30%);pointer-events:none}
+    .settingsBox>*{position:relative}
+    .settingsHead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .settingsHead h2{font-size:38px;margin:0;text-transform:uppercase}.settingsHead p{margin:6px 0 0;color:#cce4eb;line-height:1.55}
+    .settingsGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .settingsCard{border:1px solid rgba(156,243,255,.16);border-radius:18px;background:rgba(255,255,255,.035);padding:16px}
+    .settingsCard h3{margin:0 0 12px;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:17px}
+    .controlList{display:grid;gap:8px;color:#d8edf4}.controlList div{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:center}.keycap{display:inline-block;min-width:28px;text-align:center;padding:4px 8px;border:1px solid rgba(255,211,110,.32);border-radius:8px;background:rgba(0,0,0,.36);color:#ffe4a0;font-weight:bold}
+    .settingRow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin:14px 0;color:#d8edf4}.settingRow label{font-weight:bold}.settingRow small{display:block;color:#a9c2ca;margin-top:4px;font-weight:normal}.settingRow output{color:var(--gold);font-weight:bold;min-width:48px;text-align:right}
+    input[type="range"]{width:100%;accent-color:#ffd36e}.toggleRow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0;color:#d8edf4}.toggleRow input{transform:scale(1.25);accent-color:#ffd36e}.settingsActions{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:18px;border-top:1px solid rgba(156,243,255,.12);padding-top:16px}
+    @media(max-width:780px){.settingsGrid{grid-template-columns:1fr}.controlList div{grid-template-columns:1fr}.settingsHead{flex-direction:column}.settingsHead h2{font-size:30px}}
+
     @media(max-width:560px){.cards{grid-template-columns:1fr}.logo h1{font-size:34px}.hud{transform:scale(.88);transform-origin:top left}.mobileControls{display:flex}}
   </style>
 </head>
@@ -112,10 +127,11 @@
         <div>
           <div class="menuBadge">Playable story build</div>
           <h1>Rumours of the Mist</h1>
-          <p>Escape through a living ruin where the mist watches every move. This build adds a real <b>Chapter 1</b> flow, enemy attack feedback, upgraded ambience, and full game screens for loading and pause.</p>
+          <p>Escape through a living ruin where the mist watches every move. This build adds a real <b>Chapter 1</b> flow, enemy attack feedback, upgraded ambience, and full game screens for loading, pause, and settings.</p>
           <div class="menuActions">
             <button id="menuStartButton" class="primary">New Game</button>
             <button id="menuCharacterButton" class="secondary">Choose Character</button>
+            <button id="menuSettingsButton" class="secondary">Settings</button>
           </div>
         </div>
         <div class="chapterCard">
@@ -157,7 +173,7 @@
         <div class="controlsInfo">
           <b>Controls:</b> W/↑ forward, S/↓ backward, A/← turn left, D/→ turn right, Q/E strafe, F torch, M mini-map, R restart. <br />Mouse/touch drag turns camera. Audio starts after Start Game.
         </div>
-        <button id="startButton" class="primary">Start Game as Yash</button>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end"><button id="selectSettingsButton" class="secondary">Settings</button><button id="startButton" class="primary">Start Game as Yash</button></div>
       </div>
     </div>
   </section>
@@ -215,7 +231,54 @@
         <div class="overlayActions">
           <button id="resumeButton" class="primary">Resume</button>
           <button id="pauseRestartButton" class="ghost">Restart Chapter</button>
+          <button id="pauseSettingsButton" class="secondary">Settings</button>
           <button id="pauseMenuButton" class="secondary">Main Menu</button>
+        </div>
+      </div>
+    </div>
+    <div id="settingsOverlay" class="settingsOverlay">
+      <div class="settingsBox">
+        <div class="settingsHead">
+          <div>
+            <div class="menuBadge">Game Settings</div>
+            <h2>Settings</h2>
+            <p>Adjust controls, camera sensitivity, and music/ambience. Press <b>Esc</b> during gameplay to pause.</p>
+          </div>
+          <button id="closeSettingsButton" class="ghost">Close</button>
+        </div>
+        <div class="settingsGrid">
+          <div class="settingsCard">
+            <h3>Controls</h3>
+            <div class="controlList">
+              <div><span><span class="keycap">W</span> / <span class="keycap">↑</span></span><span>Walk forward</span></div>
+              <div><span><span class="keycap">S</span> / <span class="keycap">↓</span></span><span>Walk backward</span></div>
+              <div><span><span class="keycap">A</span> / <span class="keycap">←</span></span><span>Turn left</span></div>
+              <div><span><span class="keycap">D</span> / <span class="keycap">→</span></span><span>Turn right</span></div>
+              <div><span><span class="keycap">Q</span> / <span class="keycap">E</span></span><span>Strafe left / right</span></div>
+              <div><span><span class="keycap">F</span></span><span>Torch on / off</span></div>
+              <div><span><span class="keycap">M</span></span><span>Mini-map on / off</span></div>
+              <div><span><span class="keycap">Esc</span> / <span class="keycap">P</span></span><span>Pause / resume</span></div>
+            </div>
+          </div>
+          <div class="settingsCard">
+            <h3>Camera & Sound</h3>
+            <div class="settingRow">
+              <label for="sensitivityRange">Mouse sensitivity<small>Controls camera turning speed while dragging.</small></label>
+              <output id="sensitivityValue">100%</output>
+            </div>
+            <input id="sensitivityRange" type="range" min="40" max="180" value="100" />
+            <div class="settingRow">
+              <label for="musicVolumeRange">Spooky background music volume<small>Controls the looping mist music, ambience, chase tension, and sound effects.</small></label>
+              <output id="musicVolumeValue">80%</output>
+            </div>
+            <input id="musicVolumeRange" type="range" min="0" max="100" value="80" />
+            <label class="toggleRow"><span>Spooky music / ambience enabled</span><input id="musicToggle" type="checkbox" checked /></label>
+            <label class="toggleRow"><span>Show mini-map by default</span><input id="miniMapToggle" type="checkbox" checked /></label>
+          </div>
+        </div>
+        <div class="settingsActions">
+          <button id="resetSettingsButton" class="ghost">Reset Settings</button>
+          <button id="applySettingsButton" class="primary">Apply</button>
         </div>
       </div>
     </div>
@@ -264,6 +327,7 @@
 
     const characterCards = document.getElementById('characterCards');
     const startButton = document.getElementById('startButton');
+    const selectSettingsButton = document.getElementById('selectSettingsButton');
     const menuScreen = document.getElementById('menuScreen');
     const loadingScreen = document.getElementById('loadingScreen');
     const selectScreen = document.getElementById('selectScreen');
@@ -289,6 +353,7 @@
     const touchTorch = document.getElementById('touchTorch');
     const menuStartButton = document.getElementById('menuStartButton');
     const menuCharacterButton = document.getElementById('menuCharacterButton');
+    const menuSettingsButton = document.getElementById('menuSettingsButton');
     const loadingFill = document.getElementById('loadingFill');
     const loadingText = document.getElementById('loadingText');
     const chapterOverlay = document.getElementById('chapterOverlay');
@@ -299,7 +364,18 @@
     const pauseSymbols = document.getElementById('pauseSymbols');
     const resumeButton = document.getElementById('resumeButton');
     const pauseRestartButton = document.getElementById('pauseRestartButton');
+    const pauseSettingsButton = document.getElementById('pauseSettingsButton');
     const pauseMenuButton = document.getElementById('pauseMenuButton');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const closeSettingsButton = document.getElementById('closeSettingsButton');
+    const sensitivityRange = document.getElementById('sensitivityRange');
+    const sensitivityValue = document.getElementById('sensitivityValue');
+    const musicVolumeRange = document.getElementById('musicVolumeRange');
+    const musicVolumeValue = document.getElementById('musicVolumeValue');
+    const musicToggle = document.getElementById('musicToggle');
+    const miniMapToggle = document.getElementById('miniMapToggle');
+    const resetSettingsButton = document.getElementById('resetSettingsButton');
+    const applySettingsButton = document.getElementById('applySettingsButton');
 
     const imgCache = {};
     for (const [name, src] of Object.entries(CHARACTER_IMAGES)) {
@@ -352,7 +428,10 @@
     let loopStarted = false;
     let attackFlash = 0;
     let decorations = [];
-    let audioCtx = null, masterGain = null, droneGain = null, windGain = null, chaseGain = null, lastStepSfx = 0, lastDamageSfx = 0;
+    let audioCtx = null, masterGain = null, droneGain = null, windGain = null, chaseGain = null, bgMusic = null, lastStepSfx = 0, lastDamageSfx = 0;
+    let previousStateBeforeSettings = 'menu';
+    const DEFAULT_SETTINGS = { sensitivity: 100, musicVolume: 80, musicEnabled: true, miniMapDefault: true };
+    let gameSettings = loadSettings();
 
     function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
     function lerp(a,b,t){ return a + (b-a)*t; }
@@ -373,6 +452,73 @@
     }
     function setMessage(text, seconds=3){ messageEl.textContent = text; messageTimer = seconds; }
 
+
+    function loadSettings(){
+      try{
+        const saved = JSON.parse(localStorage.getItem('rotm_settings') || '{}');
+        return {...DEFAULT_SETTINGS, ...saved};
+      }catch(err){
+        return {...DEFAULT_SETTINGS};
+      }
+    }
+    function saveSettings(){
+      try{ localStorage.setItem('rotm_settings', JSON.stringify(gameSettings)); }catch(err){}
+    }
+    function updateBackgroundMusic(){
+      if(!bgMusic) return;
+      const target = gameSettings.musicEnabled ? clamp(gameSettings.musicVolume / 100 * 0.78, 0, 0.78) : 0;
+      bgMusic.volume = target;
+      if(gameSettings.musicEnabled && target > 0){
+        const playAttempt = bgMusic.play();
+        if(playAttempt && playAttempt.catch) playAttempt.catch(()=>{});
+      } else {
+        bgMusic.pause();
+      }
+    }
+    function syncSettingsUI(){
+      sensitivityRange.value = String(gameSettings.sensitivity);
+      sensitivityValue.textContent = gameSettings.sensitivity + '%';
+      musicVolumeRange.value = String(gameSettings.musicVolume);
+      musicVolumeValue.textContent = gameSettings.musicVolume + '%';
+      musicToggle.checked = !!gameSettings.musicEnabled;
+      miniMapToggle.checked = !!gameSettings.miniMapDefault;
+      applyAudioSettings();
+    }
+    function applyAudioSettings(){
+      if(masterGain){
+        const target = gameSettings.musicEnabled ? gameSettings.musicVolume / 100 * 0.15 : 0;
+        try{ masterGain.gain.setTargetAtTime(target, audioCtx.currentTime, 0.08); }
+        catch(err){ masterGain.gain.value = target; }
+      }
+      updateBackgroundMusic();
+    }
+    function updateSettingsFromUI(){
+      gameSettings.sensitivity = Number(sensitivityRange.value);
+      gameSettings.musicVolume = Number(musicVolumeRange.value);
+      gameSettings.musicEnabled = !!musicToggle.checked;
+      gameSettings.miniMapDefault = !!miniMapToggle.checked;
+      sensitivityValue.textContent = gameSettings.sensitivity + '%';
+      musicVolumeValue.textContent = gameSettings.musicVolume + '%';
+      saveSettings();
+      applyAudioSettings();
+    }
+    function openSettings(){
+      previousStateBeforeSettings = state;
+      if(state === 'playing') togglePause(true);
+      settingsOverlay.style.display = 'flex';
+      syncSettingsUI();
+    }
+    function closeSettings(){
+      updateSettingsFromUI();
+      settingsOverlay.style.display = 'none';
+    }
+    function resetSettings(){
+      gameSettings = {...DEFAULT_SETTINGS};
+      saveSettings();
+      syncSettingsUI();
+      setMessage('Settings reset.', 1.6);
+    }
+
     function createNoiseBuffer(){
       const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -382,10 +528,20 @@
 
     function startAudio(){
       try{
-        if(audioCtx){ if(audioCtx.state === 'suspended') audioCtx.resume(); return; }
+        if(!bgMusic){
+          bgMusic = new Audio('assets/spooky_mist_loop.wav');
+          bgMusic.loop = true;
+          bgMusic.preload = 'auto';
+          bgMusic.volume = gameSettings.musicEnabled ? clamp(gameSettings.musicVolume / 100 * 0.78, 0, 0.78) : 0;
+        }
+        if(audioCtx){
+          if(audioCtx.state === 'suspended') audioCtx.resume();
+          updateBackgroundMusic();
+          return;
+        }
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.18;
+        masterGain.gain.value = gameSettings.musicEnabled ? gameSettings.musicVolume / 100 * 0.15 : 0;
         masterGain.connect(audioCtx.destination);
 
         droneGain = audioCtx.createGain();
@@ -421,6 +577,8 @@
         const heartShaper = audioCtx.createGain();
         heartShaper.gain.value = 0.0;
         heart.connect(heartShaper); heartShaper.connect(chaseGain); heart.start();
+
+        updateBackgroundMusic();
       } catch(err){ console.warn('Audio could not start:', err); }
     }
 
@@ -452,9 +610,9 @@
       const d = enemy ? dist(player.x,player.y,enemy.x,enemy.y) : 10;
       const chase = clamp((6.2 - d)/6.2, 0, 1);
       const fearAmt = clamp(player.fear/100,0,1);
-      if(droneGain) droneGain.gain.setTargetAtTime(0.11 + fearAmt*0.04, audioCtx.currentTime, 0.3);
-      if(windGain) windGain.gain.setTargetAtTime(0.02 + fearAmt*0.05 + (torchOn?0:0.02), audioCtx.currentTime, 0.3);
-      if(chaseGain) chaseGain.gain.setTargetAtTime(chase*0.05 + fearAmt*0.03, audioCtx.currentTime, 0.18);
+      if(droneGain) droneGain.gain.setTargetAtTime(0.05 + fearAmt*0.025, audioCtx.currentTime, 0.3);
+      if(windGain) windGain.gain.setTargetAtTime(0.01 + fearAmt*0.03 + (torchOn?0:0.012), audioCtx.currentTime, 0.3);
+      if(chaseGain) chaseGain.gain.setTargetAtTime(chase*0.035 + fearAmt*0.02, audioCtx.currentTime, 0.18);
     }
 
     function buildCards(){
@@ -606,7 +764,7 @@
       ];
       exitGate = {x:17.5,y:17.5,open:false};
       torchOn = false;
-      showMiniMap = true;
+      showMiniMap = !!gameSettings.miniMapDefault;
       messageTimer = 4;
       setMessage(`${selectedName} enters ${LEVEL.title}. Hold W/↑ to walk forward. A/D turns. Q/E strafes.`, 4.5);
       updateHUD();
@@ -1343,6 +1501,7 @@
     document.addEventListener('keydown', (e) => {
       const k = e.key.toLowerCase();
       if(['arrowup','arrowdown','arrowleft','arrowright',' ','w','a','s','d','q','e','f','r','m','escape','p'].includes(k)) e.preventDefault();
+      if(k === 'escape' && settingsOverlay.style.display === 'flex'){ closeSettings(); return; }
       if((k === 'escape' || k === 'p') && (state === 'playing' || state === 'paused')){ togglePause(); return; }
       if(state === 'paused' || state === 'chapterIntro' || state === 'menu' || state === 'select') return;
       if(k === 'f' && !e.repeat){ toggleTorch(); return; }
@@ -1358,7 +1517,7 @@
     canvas.addEventListener('pointermove', (e)=>{
       if(!pointerDragging || state !== 'playing') return;
       const dx = e.clientX - lastPointerX; lastPointerX = e.clientX;
-      player.angle = normAngle(player.angle + dx * 0.0042);
+      player.angle = normAngle(player.angle + dx * 0.0042 * (gameSettings.sensitivity / 100));
     });
 
     document.querySelectorAll('[data-hold]').forEach(btn=>{
@@ -1369,15 +1528,26 @@
     });
     touchTorch.addEventListener('click', toggleTorch);
 
+    syncSettingsUI();
     buildCards();
     selectCharacter(selectedName);
     menuStartButton.addEventListener('click', showCharacterSelect);
     menuCharacterButton.addEventListener('click', showCharacterSelect);
+    menuSettingsButton.addEventListener('click', openSettings);
+    selectSettingsButton.addEventListener('click', openSettings);
     startButton.addEventListener('click', startGame);
     beginChapterButton.addEventListener('click', beginChapter);
     resumeButton.addEventListener('click', () => togglePause(false));
     pauseRestartButton.addEventListener('click', () => { pauseOverlay.style.display = 'none'; resetGame(); showChapterIntro(); });
+    pauseSettingsButton.addEventListener('click', openSettings);
     pauseMenuButton.addEventListener('click', showMenu);
+    closeSettingsButton.addEventListener('click', closeSettings);
+    applySettingsButton.addEventListener('click', closeSettings);
+    resetSettingsButton.addEventListener('click', resetSettings);
+    sensitivityRange.addEventListener('input', updateSettingsFromUI);
+    musicVolumeRange.addEventListener('input', updateSettingsFromUI);
+    musicToggle.addEventListener('change', updateSettingsFromUI);
+    miniMapToggle.addEventListener('change', updateSettingsFromUI);
     retryButton.addEventListener('click', () => { endOverlay.style.display = 'none'; resetGame(); showChapterIntro(); if(!loopStarted){ loopStarted = true; lastTime = performance.now(); requestAnimationFrame(loop); } });
     selectAgainButton.addEventListener('click', () => { endOverlay.style.display = 'none'; showCharacterSelect(); });
 
