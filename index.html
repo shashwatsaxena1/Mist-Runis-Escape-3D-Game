@@ -349,6 +349,8 @@
     let pointerDragging = false;
     let lastPointerX = 0;
     let time = 0;
+    let loopStarted = false;
+    let attackFlash = 0;
     let decorations = [];
     let audioCtx = null, masterGain = null, droneGain = null, windGain = null, chaseGain = null, lastStepSfx = 0, lastDamageSfx = 0;
 
@@ -706,7 +708,7 @@
           playSfx('symbol');
           player.fear = clamp(player.fear - 11, 0, 100);
           if(player.collected < TOTAL_SYMBOLS){
-            setMessage(`Natural Energy symbol collected. ${TOTAL_SYMBOLS - player.collected} remain.`, 2.6);
+            setMessage(player.collected === 1 ? 'First symbol awakened. A wall whispers: “Watcher...”' : player.collected === 2 ? 'A spiral eye opens on the stone. The Black Identity is near.' : `Natural Energy symbol collected. ${TOTAL_SYMBOLS - player.collected} remain.`, 3.0);
           } else {
             setMessage('All symbols collected. The locked exit has opened somewhere deeper in the ruins.', 4);
             playSfx('open');
@@ -800,6 +802,7 @@
       const w = canvas.width, h = canvas.height;
       drawSkyFloor(w,h);
       raycastWalls(w,h);
+      drawStoryCorridorElements(w,h);
       drawSprites(w,h);
       drawAtmosphere(w,h);
       drawAttackOverlay(w,h);
@@ -815,54 +818,44 @@
         const iw = corridorBackdrop.naturalWidth, ih = corridorBackdrop.naturalHeight;
         const scale = Math.max(w/iw, h/ih);
         const dw = iw*scale, dh = ih*scale;
-        const ox = (w-dw)/2 + Math.sin(player.angle*1.1)*40;
-        const oy = (h-dh)/2 + Math.sin(player.bob)*8;
-        ctx.globalAlpha = 0.28;
+        const ox = (w-dw)/2 + Math.sin(player.angle*1.15)*55;
+        const oy = (h-dh)/2 + Math.sin(player.bob)*10;
+        ctx.globalAlpha = 0.94;
         ctx.drawImage(corridorBackdrop, ox, oy, dw, dh);
         ctx.globalAlpha = 1;
       }
-      const gradTop = ctx.createLinearGradient(0,0,0,horizon);
-      gradTop.addColorStop(0,'rgba(2,4,6,.88)');
-      gradTop.addColorStop(1,'rgba(10,18,22,.54)');
-      ctx.fillStyle = gradTop; ctx.fillRect(0,0,w,horizon);
-      const gradBottom = ctx.createLinearGradient(0,horizon,0,h);
-      gradBottom.addColorStop(0,'rgba(8,16,18,.24)'); gradBottom.addColorStop(1,'rgba(1,3,4,.82)');
-      ctx.fillStyle = gradBottom; ctx.fillRect(0,horizon,w,h-horizon);
-      // wet floor reflection guides
-      ctx.strokeStyle = 'rgba(125,180,195,.055)';
-      ctx.lineWidth = Math.max(1,w/1100);
-      for(let i=0;i<26;i++){
-        const yy = horizon + (h-horizon)*Math.pow(i/26,1.8);
-        ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(w, yy); ctx.stroke();
+      // cinematic darkening to keep HUD readable and preserve horror mood
+      const topShade = ctx.createLinearGradient(0,0,0,horizon);
+      topShade.addColorStop(0,'rgba(0,0,0,.28)');
+      topShade.addColorStop(1,'rgba(5,10,14,.14)');
+      ctx.fillStyle = topShade; ctx.fillRect(0,0,w,horizon);
+      const bottomShade = ctx.createLinearGradient(0,horizon,0,h);
+      bottomShade.addColorStop(0,'rgba(0,0,0,.03)');
+      bottomShade.addColorStop(1,'rgba(0,0,0,.22)');
+      ctx.fillStyle = bottomShade; ctx.fillRect(0,horizon,w,h-horizon);
+      // subtle perspective guides so movement still feels game-like
+      ctx.strokeStyle = 'rgba(130,180,195,.035)';
+      ctx.lineWidth = Math.max(1,w/1350);
+      for(let i=0;i<18;i++){
+        const yy = horizon + (h-horizon)*Math.pow(i/18,1.8);
+        ctx.beginPath(); ctx.moveTo(0,yy); ctx.lineTo(w,yy); ctx.stroke();
       }
-      for(let i=-11;i<=11;i++){
-        const sx = w/2 + i*w/17 + Math.sin(player.angle*2)*18;
+      for(let i=-8;i<=8;i++){
+        const sx = w/2 + i*w/16 + Math.sin(player.angle*2)*14;
         ctx.beginPath(); ctx.moveTo(w/2,horizon); ctx.lineTo(sx,h); ctx.stroke();
       }
-      // dark ceiling beams and hanging chains
-      for(let i=0;i<8;i++){
-        const bx = ((i*193 + Math.sin(player.angle*1.3+i)*80) % (w+180))-90;
-        ctx.strokeStyle = 'rgba(0,0,0,.30)';
-        ctx.lineWidth = Math.max(10,w*.015);
-        ctx.beginPath(); ctx.moveTo(bx,0); ctx.lineTo(bx+w*.15,horizon*.50); ctx.stroke();
-        ctx.strokeStyle = 'rgba(210,220,225,.08)';
-        ctx.lineWidth = Math.max(1,w*.002);
-        ctx.beginPath(); ctx.moveTo(bx+w*.08,horizon*.10); ctx.lineTo(bx+w*.10,horizon*.62); ctx.stroke();
-      }
-      // subtle rune glows on side walls
-      ctx.save();
-      ctx.globalAlpha = 0.16;
-      ctx.strokeStyle = '#84e2ff'; ctx.lineWidth = Math.max(2,w*.0025);
-      const drawEye = (ex,ey,sc)=>{ ctx.beginPath(); ctx.ellipse(ex,ey,36*sc,20*sc,0,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.arc(ex,ey,7*sc,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); for(let i=0;i<20;i++){ const r=2*sc+i*1.5*sc; const an=i*.58+time*.7; const px=ex+Math.cos(an)*r, py=ey+Math.sin(an)*r*.65; if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);} ctx.stroke(); };
-      drawEye(w*.18, h*.46, 1);
-      drawEye(w*.81, h*.48, 1.05);
-      ctx.restore();
-      // faint floor reflection pool in center
-      const refl = ctx.createLinearGradient(0,horizon,0,h);
-      refl.addColorStop(0,'rgba(255,220,120,.02)');
-      refl.addColorStop(0.65,'rgba(80,170,200,.05)');
+      // soft torch pool on wet floor
+      const refl = ctx.createRadialGradient(w*.5,h*.78,10,w*.5,h*.78,w*.24);
+      refl.addColorStop(0,'rgba(255,224,130,.12)');
+      refl.addColorStop(.52,'rgba(120,200,230,.05)');
       refl.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle = refl; ctx.fillRect(w*.38,horizon,w*.24,h-horizon);
+      ctx.fillStyle = refl;
+      ctx.beginPath(); ctx.ellipse(w*.5,h*.80,w*.23,h*.07,0,0,Math.PI*2); ctx.fill();
+      // edge vignette
+      const vignette = ctx.createRadialGradient(w*.5,h*.52,w*.12,w*.5,h*.52,w*.78);
+      vignette.addColorStop(.58,'rgba(0,0,0,0)');
+      vignette.addColorStop(1,'rgba(0,0,0,.44)');
+      ctx.fillStyle = vignette; ctx.fillRect(0,0,w,h);
     }
 
     function raycastWalls(w,h){
@@ -893,20 +886,104 @@
         const r = Math.floor(base + centerLight*72);
         const g = Math.floor(base + 18 + centerLight*54);
         const b = Math.floor(base + 24 + centerLight*42);
-        ctx.fillStyle = `rgba(${r},${g},${b},0.88)`;
+        ctx.fillStyle = `rgba(${r},${g},${b},0.30)`;
         ctx.fillRect(x, wallTop, step+1, wallH);
         // stone block and wet-streak texture
         if(hit && corrected < 10){
           const bandH = Math.max(6, wallH/6.5);
-          ctx.fillStyle = `rgba(6,8,10,${0.18 + corrected*0.02})`;
+          ctx.fillStyle = `rgba(6,8,10,${0.10 + corrected*0.012})`;
           for(let by=wallTop + bandH; by<wallBottom; by+=bandH){ ctx.fillRect(x,by,step+1,1); }
           if((Math.floor(x/28)+Math.floor(corrected*2))%2===0){ ctx.fillRect(x,wallTop,1,wallH); }
-          if((Math.floor(x/9)+Math.floor(corrected*3))%7===0){ ctx.fillStyle='rgba(170,210,220,.07)'; ctx.fillRect(x,wallTop+wallH*0.1,step+1,wallH*0.55); }
+          if((Math.floor(x/9)+Math.floor(corrected*3))%7===0){ ctx.fillStyle='rgba(170,210,220,.04)'; ctx.fillRect(x,wallTop+wallH*0.1,step+1,wallH*0.55); }
           ctx.fillStyle='rgba(255,235,170,.06)'; ctx.fillRect(x,wallTop,step+1,Math.max(2,wallH*.03));
           ctx.fillStyle='rgba(0,0,0,.18)'; ctx.fillRect(x,wallBottom-Math.max(2,wallH*.05),step+1,Math.max(2,wallH*.05));
         }
         for(let xx=x; xx<x+step && xx<w; xx++) zBuffer[xx] = corrected;
       }
+    }
+
+
+    function drawStoryCorridorElements(w,h){
+      const horizon = h/2 + Math.sin(player.bob)*3;
+      ctx.save();
+      // side shrines and candle silhouettes matching the story concept art
+      const shrine = (x, y, s, flip=1) => {
+        ctx.save(); ctx.translate(x,y); ctx.scale(flip,1);
+        ctx.globalAlpha = 0.75;
+        ctx.fillStyle = 'rgba(10,12,14,.72)';
+        ctx.strokeStyle = 'rgba(255,211,110,.18)';
+        ctx.lineWidth = Math.max(1,w*.0015);
+        ctx.beginPath();
+        ctx.moveTo(-65*s, 38*s); ctx.lineTo(-42*s,-26*s); ctx.lineTo(0,-48*s); ctx.lineTo(42*s,-26*s); ctx.lineTo(65*s,38*s); ctx.closePath();
+        ctx.fill(); ctx.stroke();
+        ctx.fillRect(-52*s,36*s,104*s,12*s);
+        ctx.fillRect(-42*s,0,84*s,38*s);
+        ctx.fillRect(-35*s,-4*s,70*s,10*s);
+        ctx.globalAlpha = 1;
+        for(let i=-1;i<=1;i++){
+          const cx=i*18*s, cy=30*s;
+          const glow=ctx.createRadialGradient(cx,cy,1,cx,cy,18*s);
+          glow.addColorStop(0,'rgba(255,210,125,.40)'); glow.addColorStop(1,'rgba(255,210,125,0)');
+          ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(cx,cy,18*s,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle='rgba(255,233,196,.88)'; ctx.fillRect(cx-2*s,cy,4*s,10*s);
+          ctx.fillStyle='rgba(255,182,66,.92)'; ctx.beginPath(); ctx.ellipse(cx,cy-4*s,3*s,6*s,0,0,Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+      };
+      shrine(w*.085,h*.63,.65,1);
+      shrine(w*.90,h*.66,.56,-1);
+      // hanging bells across the corridor
+      const bellPositions = [[.31,.18,.95],[.49,.20,.55],[.70,.16,1.05],[.75,.24,.72]];
+      for(const [bx,by,sc] of bellPositions){
+        const x=w*bx + Math.sin(time*0.75+bx*8)*4, y=h*by;
+        ctx.strokeStyle='rgba(154,118,56,.54)'; ctx.lineWidth=Math.max(2,w*.0016);
+        ctx.beginPath(); ctx.moveTo(x,y-h*.14); ctx.lineTo(x,y+h*.02); ctx.stroke();
+        const s=Math.min(w,h)*0.048*sc;
+        ctx.fillStyle='rgba(20,16,12,.72)'; ctx.strokeStyle='rgba(255,210,126,.35)';
+        ctx.beginPath(); ctx.moveTo(x-s*.40,y); ctx.quadraticCurveTo(x,y-s*.30,x+s*.40,y); ctx.lineTo(x+s*.26,y+s*.50); ctx.quadraticCurveTo(x,y+s*.64,x-s*.26,y+s*.50); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle='rgba(238,226,190,.25)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x,y+s*.44); ctx.lineTo(x,y+s*.66); ctx.stroke();
+      }
+      // carved spiral eyes and glowing runes on the walls
+      const eye = (x,y,s,a=.22)=>{
+        ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = '#84e2ff'; ctx.lineWidth = Math.max(2,w*.0025);
+        ctx.beginPath(); ctx.ellipse(x,y,44*s,22*s,0,0,Math.PI*2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x,y,7*s,0,Math.PI*2); ctx.stroke();
+        ctx.beginPath();
+        for(let i=0;i<28;i++){ const r=2*s+i*1.45*s; const an=i*.55+time*.45; const px=x+Math.cos(an)*r, py=y+Math.sin(an)*r*.62; if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);} ctx.stroke();
+        ctx.restore();
+      };
+      eye(w*.17,h*.31,1.05,.14);
+      eye(w*.84,h*.34,1.12,.14);
+      eye(w*.53,h*.27,.82,.24);
+      // floating scripture lines down the pillars
+      ctx.save();
+      ctx.font = `${Math.max(18,w*.017)}px Georgia`; ctx.fillStyle='rgba(132,226,255,.26)'; ctx.textAlign='center';
+      const scripts = ['忘れない','remember','watcher','mist'];
+      const points = [[.36,.44],[.69,.43],[.76,.39],[.42,.48]];
+      points.forEach(([px,py],i)=>{ ctx.fillText(scripts[i], w*px, h*py); });
+      ctx.restore();
+      // central mist path and floor sigils
+      const fogPath = ctx.createLinearGradient(w*.5,h*.28,w*.5,h*.96);
+      fogPath.addColorStop(0,'rgba(210,236,245,.16)'); fogPath.addColorStop(.45,'rgba(220,240,255,.06)'); fogPath.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=fogPath; ctx.beginPath(); ctx.ellipse(w*.5,h*.62,w*.12,h*.36,0,0,Math.PI*2); ctx.fill();
+      eye(w*.43,h*.81,.52,.26); eye(w*.59,h*.80,.46,.22);
+      // chapter text hidden in the mist
+      ctx.globalAlpha = .12;
+      ctx.fillStyle='#f2fbff'; ctx.font = `${Math.max(18,w*.016)}px Georgia`; ctx.textAlign='center';
+      ctx.fillText('THE MIST REMEMBERS', w*.50, horizon*.74);
+      ctx.globalAlpha = 1;
+      // black identity foreshadow in the distance
+      const a = player.collected >= 1 ? Math.min(0.62, 0.16 + player.collected*0.12) : 0.08;
+      ctx.globalAlpha = a;
+      ctx.fillStyle='rgba(0,0,0,.90)';
+      const x=w*.58, y=h*.48;
+      ctx.beginPath(); ctx.ellipse(x,y+h*.02,w*.024,h*.12,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x,y-h*.09,w*.016,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,90,110,.95)';
+      ctx.beginPath(); ctx.arc(x-w*.0055,y-h*.092,2.1,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+w*.0055,y-h*.092,2.1,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.restore();
     }
 
     function projectSprite(obj){
@@ -1292,17 +1369,19 @@
     });
     touchTorch.addEventListener('click', toggleTorch);
 
-    startButton.addEventListener('click', startGame);
-    retryButton.addEventListener('click', () => { resetGame(); canvas.focus(); requestAnimationFrame(loop); });
-    selectAgainButton.addEventListener('click', () => {
-      state = 'select';
-      endOverlay.style.display = 'none';
-      gameScreen.style.display = 'none';
-      selectScreen.style.display = 'flex';
-      buildCards();
-    });
-
     buildCards();
+    selectCharacter(selectedName);
+    menuStartButton.addEventListener('click', showCharacterSelect);
+    menuCharacterButton.addEventListener('click', showCharacterSelect);
+    startButton.addEventListener('click', startGame);
+    beginChapterButton.addEventListener('click', beginChapter);
+    resumeButton.addEventListener('click', () => togglePause(false));
+    pauseRestartButton.addEventListener('click', () => { pauseOverlay.style.display = 'none'; resetGame(); showChapterIntro(); });
+    pauseMenuButton.addEventListener('click', showMenu);
+    retryButton.addEventListener('click', () => { endOverlay.style.display = 'none'; resetGame(); showChapterIntro(); if(!loopStarted){ loopStarted = true; lastTime = performance.now(); requestAnimationFrame(loop); } });
+    selectAgainButton.addEventListener('click', () => { endOverlay.style.display = 'none'; showCharacterSelect(); });
+
+    showMenu();
   </script>
 </body>
 </html>
