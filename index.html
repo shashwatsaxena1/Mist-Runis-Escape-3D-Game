@@ -829,7 +829,7 @@
       time += dt;
       if(messageTimer > 0){
         messageTimer -= dt;
-        if(messageTimer <= 0) messageEl.textContent = 'The mist moves through the walls. Keep moving.';
+        if(messageTimer <= 0) messageEl.textContent = 'The shrine hall breathes through the mist. Keep moving.';
       }
       attackFlash = Math.max(0, attackFlash - dt*1.9);
       handleInput(dt);
@@ -964,7 +964,6 @@
       drawSprites(w,h);
       drawAtmosphere(w,h);
       drawAttackOverlay(w,h);
-      drawActiveCharacter(w,h);
       drawHand(w,h);
       if(showMiniMap) drawMiniMap(w,h);
     }
@@ -976,170 +975,90 @@
         const iw = corridorBackdrop.naturalWidth, ih = corridorBackdrop.naturalHeight;
         const scale = Math.max(w/iw, h/ih);
         const dw = iw*scale, dh = ih*scale;
-        const ox = (w-dw)/2 + Math.sin(player.angle*1.15)*55;
-        const oy = (h-dh)/2 + Math.sin(player.bob)*10;
-        ctx.globalAlpha = 0.94;
-        ctx.drawImage(corridorBackdrop, ox, oy, dw, dh);
+        const ox = (w-dw)/2 + Math.sin(player.angle*1.05)*22;
+        const oy = (h-dh)/2 + Math.sin(player.bob)*6;
         ctx.globalAlpha = 1;
+        ctx.drawImage(corridorBackdrop, ox, oy, dw, dh);
       }
-      // cinematic darkening to keep HUD readable and preserve horror mood
-      const topShade = ctx.createLinearGradient(0,0,0,horizon);
-      topShade.addColorStop(0,'rgba(0,0,0,.28)');
-      topShade.addColorStop(1,'rgba(5,10,14,.14)');
-      ctx.fillStyle = topShade; ctx.fillRect(0,0,w,horizon);
-      const bottomShade = ctx.createLinearGradient(0,horizon,0,h);
-      bottomShade.addColorStop(0,'rgba(0,0,0,.03)');
-      bottomShade.addColorStop(1,'rgba(0,0,0,.22)');
-      ctx.fillStyle = bottomShade; ctx.fillRect(0,horizon,w,h-horizon);
-      // subtle perspective guides so movement still feels game-like
-      ctx.strokeStyle = 'rgba(130,180,195,.035)';
-      ctx.lineWidth = Math.max(1,w/1350);
-      for(let i=0;i<18;i++){
-        const yy = horizon + (h-horizon)*Math.pow(i/18,1.8);
-        ctx.beginPath(); ctx.moveTo(0,yy); ctx.lineTo(w,yy); ctx.stroke();
+      // very light cinematic grading only, so it still looks like the reference picture
+      const gradeTop = ctx.createLinearGradient(0,0,0,h);
+      gradeTop.addColorStop(0,'rgba(0,0,0,.08)');
+      gradeTop.addColorStop(.55,'rgba(0,0,0,.02)');
+      gradeTop.addColorStop(1,'rgba(0,0,0,.12)');
+      ctx.fillStyle = gradeTop;
+      ctx.fillRect(0,0,w,h);
+      // floor glow to react to torch
+      if(torchOn && player.torch > 0){
+        const beam = ctx.createRadialGradient(w/2,h*.66,8,w/2,h*.66,w*.20*player.torchPower);
+        beam.addColorStop(0,'rgba(255,238,180,.10)'); beam.addColorStop(1,'rgba(255,238,180,0)');
+        ctx.fillStyle = beam; ctx.fillRect(0,0,w,h);
       }
-      for(let i=-8;i<=8;i++){
-        const sx = w/2 + i*w/16 + Math.sin(player.angle*2)*14;
-        ctx.beginPath(); ctx.moveTo(w/2,horizon); ctx.lineTo(sx,h); ctx.stroke();
-      }
-      // soft torch pool on wet floor
-      const refl = ctx.createRadialGradient(w*.5,h*.78,10,w*.5,h*.78,w*.24);
-      refl.addColorStop(0,'rgba(255,224,130,.12)');
-      refl.addColorStop(.52,'rgba(120,200,230,.05)');
-      refl.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle = refl;
-      ctx.beginPath(); ctx.ellipse(w*.5,h*.80,w*.23,h*.07,0,0,Math.PI*2); ctx.fill();
       // edge vignette
-      const vignette = ctx.createRadialGradient(w*.5,h*.52,w*.12,w*.5,h*.52,w*.78);
-      vignette.addColorStop(.58,'rgba(0,0,0,0)');
-      vignette.addColorStop(1,'rgba(0,0,0,.44)');
-      ctx.fillStyle = vignette; ctx.fillRect(0,0,w,h);
+      const vignette = ctx.createRadialGradient(w*.5,h*.52,w*.15,w*.5,h*.52,w*.82);
+      vignette.addColorStop(.62,'rgba(0,0,0,0)');
+      vignette.addColorStop(1,'rgba(0,0,0,.34)');
+      ctx.fillStyle = vignette;
+      ctx.fillRect(0,0,w,h);
     }
 
     function raycastWalls(w,h){
       const step = Math.max(1, Math.floor(w/620));
       zBuffer = new Float32Array(w);
+      const horizon = h/2 + Math.sin(player.bob)*3;
       for(let x=0; x<w; x+=step){
         const rayAngle = player.angle - FOV/2 + (x/w)*FOV;
         const sin = Math.sin(rayAngle), cos = Math.cos(rayAngle);
-        let depth = 0.02, hit = false, shadeSide = 0;
-        let lastCellX = Math.floor(player.x), lastCellY = Math.floor(player.y);
+        let depth = 0.02;
         while(depth < MAX_DEPTH){
           const rx = player.x + cos*depth;
           const ry = player.y + sin*depth;
-          const cx = Math.floor(rx), cy = Math.floor(ry);
-          if(cx !== lastCellX){ shadeSide = 1; lastCellX = cx; }
-          if(cy !== lastCellY){ shadeSide = 0; lastCellY = cy; }
-          if(isWall(rx,ry)){ hit = true; break; }
+          if(isWall(rx,ry)) break;
           depth += 0.026;
         }
         let corrected = depth * Math.cos(rayAngle - player.angle);
         corrected = Math.max(0.04, corrected);
-        const wallH = Math.min(h*2.2, h / corrected * 0.82);
-        const wallTop = h/2 - wallH/2 + Math.sin(player.bob)*3;
-        const wallBottom = wallTop + wallH;
-        const fogFade = clamp(1 - corrected/MAX_DEPTH, .04, 1);
-        const base = Math.floor((shadeSide?58:74) * fogFade + 10);
-        const centerLight = torchOn ? clamp(1 - Math.abs(x-w/2)/(w*.44),0,1) * .55 : 0;
-        const r = Math.floor(base + centerLight*72);
-        const g = Math.floor(base + 18 + centerLight*54);
-        const b = Math.floor(base + 24 + centerLight*42);
-        ctx.fillStyle = `rgba(${r},${g},${b},0.30)`;
-        ctx.fillRect(x, wallTop, step+1, wallH);
-        // stone block and wet-streak texture
-        if(hit && corrected < 10){
-          const bandH = Math.max(6, wallH/6.5);
-          ctx.fillStyle = `rgba(6,8,10,${0.10 + corrected*0.012})`;
-          for(let by=wallTop + bandH; by<wallBottom; by+=bandH){ ctx.fillRect(x,by,step+1,1); }
-          if((Math.floor(x/28)+Math.floor(corrected*2))%2===0){ ctx.fillRect(x,wallTop,1,wallH); }
-          if((Math.floor(x/9)+Math.floor(corrected*3))%7===0){ ctx.fillStyle='rgba(170,210,220,.04)'; ctx.fillRect(x,wallTop+wallH*0.1,step+1,wallH*0.55); }
-          ctx.fillStyle='rgba(255,235,170,.06)'; ctx.fillRect(x,wallTop,step+1,Math.max(2,wallH*.03));
-          ctx.fillStyle='rgba(0,0,0,.18)'; ctx.fillRect(x,wallBottom-Math.max(2,wallH*.05),step+1,Math.max(2,wallH*.05));
-        }
         for(let xx=x; xx<x+step && xx<w; xx++) zBuffer[xx] = corrected;
       }
+      // subtle side-wall darkening so the scene still reads as a playable corridor
+      const sideFade = ctx.createLinearGradient(0,0,w,0);
+      sideFade.addColorStop(0,'rgba(4,8,10,.22)');
+      sideFade.addColorStop(.16,'rgba(4,8,10,.08)');
+      sideFade.addColorStop(.50,'rgba(0,0,0,0)');
+      sideFade.addColorStop(.84,'rgba(4,8,10,.08)');
+      sideFade.addColorStop(1,'rgba(4,8,10,.22)');
+      ctx.fillStyle = sideFade;
+      ctx.fillRect(0,horizon*.42,w,h-horizon*.08);
     }
 
 
     function drawStoryCorridorElements(w,h){
       const horizon = h/2 + Math.sin(player.bob)*3;
       ctx.save();
-      // side shrines and candle silhouettes matching the story concept art
-      const shrine = (x, y, s, flip=1) => {
-        ctx.save(); ctx.translate(x,y); ctx.scale(flip,1);
-        ctx.globalAlpha = 0.75;
-        ctx.fillStyle = 'rgba(10,12,14,.72)';
-        ctx.strokeStyle = 'rgba(255,211,110,.18)';
-        ctx.lineWidth = Math.max(1,w*.0015);
-        ctx.beginPath();
-        ctx.moveTo(-65*s, 38*s); ctx.lineTo(-42*s,-26*s); ctx.lineTo(0,-48*s); ctx.lineTo(42*s,-26*s); ctx.lineTo(65*s,38*s); ctx.closePath();
-        ctx.fill(); ctx.stroke();
-        ctx.fillRect(-52*s,36*s,104*s,12*s);
-        ctx.fillRect(-42*s,0,84*s,38*s);
-        ctx.fillRect(-35*s,-4*s,70*s,10*s);
-        ctx.globalAlpha = 1;
-        for(let i=-1;i<=1;i++){
-          const cx=i*18*s, cy=30*s;
-          const glow=ctx.createRadialGradient(cx,cy,1,cx,cy,18*s);
-          glow.addColorStop(0,'rgba(255,210,125,.40)'); glow.addColorStop(1,'rgba(255,210,125,0)');
-          ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(cx,cy,18*s,0,Math.PI*2); ctx.fill();
-          ctx.fillStyle='rgba(255,233,196,.88)'; ctx.fillRect(cx-2*s,cy,4*s,10*s);
-          ctx.fillStyle='rgba(255,182,66,.92)'; ctx.beginPath(); ctx.ellipse(cx,cy-4*s,3*s,6*s,0,0,Math.PI*2); ctx.fill();
-        }
-        ctx.restore();
-      };
-      shrine(w*.085,h*.63,.65,1);
-      shrine(w*.90,h*.66,.56,-1);
-      // hanging bells across the corridor
-      const bellPositions = [[.31,.18,.95],[.49,.20,.55],[.70,.16,1.05],[.75,.24,.72]];
-      for(const [bx,by,sc] of bellPositions){
-        const x=w*bx + Math.sin(time*0.75+bx*8)*4, y=h*by;
-        ctx.strokeStyle='rgba(154,118,56,.54)'; ctx.lineWidth=Math.max(2,w*.0016);
-        ctx.beginPath(); ctx.moveTo(x,y-h*.14); ctx.lineTo(x,y+h*.02); ctx.stroke();
-        const s=Math.min(w,h)*0.048*sc;
-        ctx.fillStyle='rgba(20,16,12,.72)'; ctx.strokeStyle='rgba(255,210,126,.35)';
-        ctx.beginPath(); ctx.moveTo(x-s*.40,y); ctx.quadraticCurveTo(x,y-s*.30,x+s*.40,y); ctx.lineTo(x+s*.26,y+s*.50); ctx.quadraticCurveTo(x,y+s*.64,x-s*.26,y+s*.50); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle='rgba(238,226,190,.25)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x,y+s*.44); ctx.lineTo(x,y+s*.66); ctx.stroke();
-      }
-      // carved spiral eyes and glowing runes on the walls
-      const eye = (x,y,s,a=.22)=>{
-        ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = '#84e2ff'; ctx.lineWidth = Math.max(2,w*.0025);
-        ctx.beginPath(); ctx.ellipse(x,y,44*s,22*s,0,0,Math.PI*2); ctx.stroke();
-        ctx.beginPath(); ctx.arc(x,y,7*s,0,Math.PI*2); ctx.stroke();
-        ctx.beginPath();
-        for(let i=0;i<28;i++){ const r=2*s+i*1.45*s; const an=i*.55+time*.45; const px=x+Math.cos(an)*r, py=y+Math.sin(an)*r*.62; if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);} ctx.stroke();
-        ctx.restore();
-      };
-      eye(w*.17,h*.31,1.05,.14);
-      eye(w*.84,h*.34,1.12,.14);
-      eye(w*.53,h*.27,.82,.24);
-      // floating scripture lines down the pillars
-      ctx.save();
-      ctx.font = `${Math.max(18,w*.017)}px Georgia`; ctx.fillStyle='rgba(132,226,255,.26)'; ctx.textAlign='center';
-      const scripts = ['忘れない','remember','watcher','mist'];
-      const points = [[.36,.44],[.69,.43],[.76,.39],[.42,.48]];
-      points.forEach(([px,py],i)=>{ ctx.fillText(scripts[i], w*px, h*py); });
-      ctx.restore();
-      // central mist path and floor sigils
-      const fogPath = ctx.createLinearGradient(w*.5,h*.28,w*.5,h*.96);
-      fogPath.addColorStop(0,'rgba(210,236,245,.16)'); fogPath.addColorStop(.45,'rgba(220,240,255,.06)'); fogPath.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=fogPath; ctx.beginPath(); ctx.ellipse(w*.5,h*.62,w*.12,h*.36,0,0,Math.PI*2); ctx.fill();
-      eye(w*.43,h*.81,.52,.26); eye(w*.59,h*.80,.46,.22);
-      // chapter text hidden in the mist
-      ctx.globalAlpha = .12;
-      ctx.fillStyle='#f2fbff'; ctx.font = `${Math.max(18,w*.016)}px Georgia`; ctx.textAlign='center';
-      ctx.fillText('THE MIST REMEMBERS', w*.50, horizon*.74);
-      ctx.globalAlpha = 1;
-      // black identity foreshadow in the distance
-      const a = player.collected >= 1 ? Math.min(0.62, 0.16 + player.collected*0.12) : 0.08;
+      // gentle animated mist in the center aisle
+      const mist = ctx.createRadialGradient(w*.5,h*.58,10,w*.5,h*.58,w*.25);
+      mist.addColorStop(0,'rgba(220,240,255,.10)');
+      mist.addColorStop(.55,'rgba(220,240,255,.03)');
+      mist.addColorStop(1,'rgba(220,240,255,0)');
+      ctx.fillStyle = mist;
+      ctx.beginPath();
+      ctx.ellipse(w*.5 + Math.sin(time*.35)*10,h*.60,w*.22,h*.17,0,0,Math.PI*2);
+      ctx.fill();
+      // faint floor sigil pulse matching the story
+      const pulse = 0.08 + (Math.sin(time*2.4)+1)*0.03;
+      ctx.strokeStyle = `rgba(132,226,255,${pulse})`;
+      ctx.lineWidth = Math.max(2,w*.0016);
+      ctx.beginPath(); ctx.ellipse(w*.43,h*.80,w*.03,h*.012,0,0,Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(w*.60,h*.79,w*.028,h*.011,0,0,Math.PI*2); ctx.stroke();
+      // distant Black Identity foreshadow in the aisle
+      const a = player.collected >= 1 ? Math.min(0.55, 0.14 + player.collected*0.10) : 0.10;
       ctx.globalAlpha = a;
-      ctx.fillStyle='rgba(0,0,0,.90)';
-      const x=w*.58, y=h*.48;
-      ctx.beginPath(); ctx.ellipse(x,y+h*.02,w*.024,h*.12,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(x,y-h*.09,w*.016,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='rgba(255,90,110,.95)';
-      ctx.beginPath(); ctx.arc(x-w*.0055,y-h*.092,2.1,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(x+w*.0055,y-h*.092,2.1,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(0,0,0,.82)';
+      const x=w*.56, y=h*.46;
+      ctx.beginPath(); ctx.ellipse(x,y+h*.02,w*.022,h*.11,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x,y-h*.08,w*.015,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,82,102,.90)';
+      ctx.beginPath(); ctx.arc(x-w*.0048,y-h*.083,2,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+w*.0048,y-h*.083,2,0,Math.PI*2); ctx.fill();
       ctx.globalAlpha = 1;
       ctx.restore();
     }
@@ -1293,31 +1212,24 @@
     }
 
     function drawAtmosphere(w,h){
-      // moving fog layers across the 3D corridor
       ctx.save();
-      for(let i=0;i<36;i++){
-        const px = (Math.sin(time*.12+i*9.7)*0.5+0.5)*w;
-        const py = ((i*67 + time*22*(i%3+1)) % (h+180))-90;
-        const sw = 120 + (i%5)*55;
-        const sh = 20 + (i%4)*10;
-        ctx.fillStyle = `rgba(190,215,220,${0.018 + (i%4)*0.008})`;
-        ctx.beginPath(); ctx.ellipse(px,py,sw,sh,Math.sin(i)*0.5,0,Math.PI*2); ctx.fill();
+      // low, drifting ground fog only
+      for(let i=0;i<14;i++){
+        const px = (Math.sin(time*.10+i*7.2)*0.5+0.5)*w;
+        const py = h*.72 + ((i*33 + time*8*(i%3+1)) % 120) - 60;
+        const sw = 140 + (i%5)*60;
+        const sh = 22 + (i%4)*10;
+        ctx.fillStyle = `rgba(190,215,220,${0.010 + (i%4)*0.005})`;
+        ctx.beginPath(); ctx.ellipse(px,py,sw,sh,Math.sin(i)*0.4,0,Math.PI*2); ctx.fill();
       }
       const danger = clamp(player.fear/100,0,1);
-      const vignette = ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.18,w/2,h/2,Math.max(w,h)*0.66);
-      vignette.addColorStop(0, torchOn?'rgba(0,0,0,.05)':'rgba(0,0,0,.12)');
-      vignette.addColorStop(.68,`rgba(0,0,0,${0.25 + danger*.18})`);
-      vignette.addColorStop(1,`rgba(${Math.floor(danger*80)},0,0,${0.76 + danger*.16})`);
+      const vignette = ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.22,w/2,h/2,Math.max(w,h)*0.70);
+      vignette.addColorStop(0, torchOn?'rgba(0,0,0,.02)':'rgba(0,0,0,.06)');
+      vignette.addColorStop(.70,`rgba(0,0,0,${0.15 + danger*.10})`);
+      vignette.addColorStop(1,`rgba(${Math.floor(danger*80)},0,0,${0.52 + danger*.12})`);
       ctx.fillStyle = vignette; ctx.fillRect(0,0,w,h);
-      if(torchOn && player.torch > 0){
-        ctx.globalCompositeOperation = 'screen';
-        const beam = ctx.createRadialGradient(w/2,h*.55,10,w/2,h*.55,w*.38*player.torchPower);
-        beam.addColorStop(0,'rgba(255,246,190,.18)'); beam.addColorStop(1,'rgba(255,246,190,0)');
-        ctx.fillStyle = beam; ctx.fillRect(0,0,w,h);
-        ctx.globalCompositeOperation = 'source-over';
-      }
       if(player.fear > 72){
-        ctx.fillStyle = `rgba(255,0,20,${(player.fear-72)/28*.10})`;
+        ctx.fillStyle = `rgba(255,0,20,${(player.fear-72)/28*.08})`;
         ctx.fillRect(0,0,w,h);
       }
       ctx.restore();
@@ -1343,77 +1255,7 @@
       ctx.restore();
     }
 
-    function drawActiveCharacter(w,h){
-      const c = CHARACTER_COLORS[selectedName] || CHARACTER_COLORS.Yash;
-      const moving = keys['w'] || keys['arrowup'] || keys['s'] || keys['arrowdown'] || keys['q'] || keys['e'] || hold.forward || hold.backward || hold.strafeLeft || hold.strafeRight;
-      const stride = moving ? Math.sin(player.bob * 1.65) : Math.sin(time * 1.2) * 0.15;
-      const bob = moving ? Math.abs(Math.sin(player.bob * 1.65)) * 12 : Math.sin(time * 1.2) * 2;
-      const scale = Math.min(w,h) / 760;
-      const cx = w * 0.50 + Math.sin(player.bob * .8) * (moving ? 7 : 1);
-      const ground = h - 12 + bob;
-      const bodyH = Math.min(210, h * 0.31);
-      ctx.save();
-      ctx.translate(cx, ground);
-      ctx.scale(scale, scale);
-      ctx.globalAlpha = 0.46;
-      // shadow on the floor
-      ctx.fillStyle = 'rgba(0,0,0,.46)';
-      ctx.beginPath(); ctx.ellipse(0, -8, 76, 17, 0, 0, Math.PI*2); ctx.fill();
-      // legs with walking animation
-      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.strokeStyle = '#07090a'; ctx.lineWidth = 16;
-      ctx.beginPath(); ctx.moveTo(-18,-72); ctx.lineTo(-25 + stride*18,-22); ctx.lineTo(-40 + stride*26,-5); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(18,-72); ctx.lineTo(25 - stride*18,-22); ctx.lineTo(40 - stride*26,-5); ctx.stroke();
-      ctx.strokeStyle = c.shirt; ctx.lineWidth = 8;
-      ctx.beginPath(); ctx.moveTo(-40 + stride*26,-5); ctx.lineTo(-54 + stride*26,-4); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(40 - stride*26,-5); ctx.lineTo(54 - stride*26,-4); ctx.stroke();
-      // coat/body from behind
-      const coatGrad = ctx.createLinearGradient(0,-190,0,-58);
-      coatGrad.addColorStop(0,c.coat); coatGrad.addColorStop(1,'#050708');
-      ctx.fillStyle = coatGrad;
-      ctx.beginPath();
-      ctx.moveTo(-44,-180); ctx.quadraticCurveTo(-62,-130,-46,-58);
-      ctx.lineTo(46,-58); ctx.quadraticCurveTo(62,-130,44,-180);
-      ctx.quadraticCurveTo(0,-205,-44,-180); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,.09)'; ctx.lineWidth = 2; ctx.stroke();
-      // shirt/inner line
-      ctx.fillStyle = c.shirt;
-      ctx.beginPath(); ctx.moveTo(-18,-176); ctx.lineTo(18,-176); ctx.lineTo(12,-82); ctx.lineTo(-12,-82); ctx.closePath(); ctx.fill();
-      // arms
-      ctx.strokeStyle = c.coat; ctx.lineWidth = 17;
-      ctx.beginPath(); ctx.moveTo(-38,-160); ctx.lineTo(-62 + stride*8,-102); ctx.lineTo(-56 + stride*12,-72); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(38,-160); ctx.lineTo(62 - stride*8,-102); ctx.lineTo(56 - stride*12,-72); ctx.stroke();
-      ctx.fillStyle = c.skin;
-      ctx.beginPath(); ctx.arc(-56 + stride*12,-69,8,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(56 - stride*12,-69,8,0,Math.PI*2); ctx.fill();
-      // natural energy mark glow on hand when torch is on
-      if(torchOn){
-        ctx.shadowColor = c.accent; ctx.shadowBlur = 22; ctx.fillStyle = c.accent;
-        ctx.beginPath(); ctx.arc(56 - stride*12,-69,5,0,Math.PI*2); ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-      // head and hair
-      ctx.fillStyle = c.skin;
-      ctx.beginPath(); ctx.ellipse(0,-218,28,32,0,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle = c.hair;
-      ctx.beginPath();
-      ctx.ellipse(0,-235,36,28,0,Math.PI,Math.PI*2); ctx.fill();
-      for(let i=-3;i<=3;i++){
-        ctx.beginPath();
-        ctx.moveTo(i*11,-245);
-        ctx.quadraticCurveTo(i*18 + Math.sin(time+i)*5,-223, i*7,-207);
-        ctx.lineTo(i*4,-223); ctx.closePath(); ctx.fill();
-      }
-      // selected aura
-      ctx.strokeStyle = c.accent; ctx.globalAlpha = .36; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.ellipse(0,-117,78,144,0,0,Math.PI*2); ctx.stroke();
-      ctx.globalAlpha = .92;
-      // name plate
-      ctx.fillStyle = 'rgba(0,0,0,.58)'; ctx.beginPath(); ctx.roundRect(-62,-282,124,28,12); ctx.fill();
-      ctx.fillStyle = '#ffd36e'; ctx.font = 'bold 15px Georgia'; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(selectedName.toUpperCase(),0,-268);
-      ctx.restore();
-    }
+    function drawActiveCharacter(w,h){ return; }
 
     function drawHand(w,h){
       const bob = Math.sin(player.bob)*8;
