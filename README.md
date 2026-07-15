@@ -1,4 +1,4 @@
-# Rumours of the Mist: Escape — V3.3 Settings Build
+# Rumours of the Mist: Escape — V2.4 Settings Build
 
 This build adds a Settings system to the graphical story-corridor version.
 
