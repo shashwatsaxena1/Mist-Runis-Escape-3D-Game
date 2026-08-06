@@ -1,55 +1,36 @@
-# Rumours of the Mist: Escape — V2.4 Settings Build
+# Rumours of the Mist — 3D Battleground Prototype V2 Fixed
 
-This build adds a Settings system to the graphical story-corridor version.
+This build fixes the issues from the first 3D prototype.
 
-## New in this build
+## Fixed
+- Arrow keys now work.
+- Character photos/cards are embedded in the game, so they should not disappear.
+- HUD avatar is embedded and visible.
+- Added stronger 3D arena graphics: stone floor, visible walls, pillars, runes, shrines, candles, fog, and exit gate.
+- Improved the third-person character model so the player is easier to see.
 
-- Settings button on the Main Menu
-- Settings button on the Character Select screen
-- Settings button inside the Pause screen
-- Controls guide inside Settings
-- Mouse sensitivity slider
-- Music / ambience volume slider
-- Music / ambience on/off toggle
-- Mini-map default on/off toggle
-- Esc key pauses the game during gameplay
-- P key also pauses/resumes
-
-## How to run
-
-1. Extract the zip.
-2. Open the folder.
-3. Double-click `index.html`.
-4. Click **New Game**.
-5. Choose a character.
-6. Click **Start Game as [Character]**.
+## Open
+Open `index.html` in Chrome or Edge.
 
 ## Controls
+- WASD / Arrow Keys: Move
+- Mouse: Rotate camera / aim
+- Left Click: Shoot Natural Energy
+- Shift: Sprint
+- Space: Jump
+- F: Torch
+- R: Reload Energy
+- Esc / P: Pause
 
-- W / Arrow Up: Walk forward
-- S / Arrow Down: Walk backward
-- A / Arrow Left: Turn left
-- D / Arrow Right: Turn right
-- Q / E: Strafe left / right
-- F: Torch on/off
-- M: Mini-map on/off
-- Esc / P: Pause / resume
-- R: Restart chapter
-- Mouse / touch drag: Turn camera
-
-## Note
-
-Audio starts only after pressing Start Game because browsers block autoplay before user interaction.
+Click inside the game screen once to lock the camera.
 
 
-## V3.4 Spooky Music Update
+V3 Control + Graphics Fix:
+- Fixed arrow left/right turning direction.
+- Arrow Left/Right now rotate the camera/player, while A/D strafe.
+- Added more shrine ruins, wall reliefs, glowing runes, ceiling bells, stones, energy shafts, and Black Identity foreshadow.
 
-Added a custom looping spooky background track:
 
-- Deep mist drone
-- Distant ritual bells
-- Wind/whisper texture
-- Soft heartbeat tension pulses
-- Works with the existing Settings menu music volume and music on/off toggle
-
-Audio starts after pressing Start Game, because browsers block autoplay until user interaction.
+## V4 Fix
+- Fixed A/D strafe direction so character no longer moves opposite.
+- Added denser shrine graphics: stairs, talismans, puddles, gate rings, more pillars and stronger walls.
